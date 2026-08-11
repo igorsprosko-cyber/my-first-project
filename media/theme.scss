@@ -1,0 +1,192 @@
+// settings_data
+@import "settings";
+
+.outside-widgets .delete-widget-link {
+  display: none;
+}
+
+.outside-widgets .add-widget-link {
+  display: none;
+}
+
+[data-fixed-panels] .delete-widget-link {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  [style*="--is-editor:true"] .outside-widgets {
+    display: none;
+  }
+  .edit-widget-buttons .widget-name {
+    display: none !important;
+  }
+  [data-fixed-panels] [data-widget-add] {
+    display: none;
+  }
+}
+
+/* ===== СТИЛИЗАЦИЯ ШАПКИ (VELES-LEGS) ===== */
+.header__content,
+.side-panel__content {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+/* Логотип */
+.header__logo img {
+  max-height: 50px !important;
+  filter: none !important;
+}
+
+/* Ссылки в меню */
+.header__collections-link {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 14px !important;
+  color: #000 !important;
+  text-decoration: none !important;
+  transition: opacity 0.3s !important;
+}
+.header__collections-link:hover {
+  opacity: 0.7;
+}
+
+/* Заголовок "Каталог" */
+.header__collections-head {
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  color: #000 !important;
+}
+
+/* Иконки (корзина, избранное, сравнение, меню) */
+.header__control-btn {
+  color: #000 !important;
+}
+.header__control-btn .icon {
+  color: inherit !important;
+}
+
+/* Кнопка "Меню" */
+.header__show-menu-btn {
+  color: #000 !important;
+}
+
+/* Поле поиска */
+.header__search-field {
+  border: 1px solid #000 !important;
+  border-radius: 30px !important;
+  font-family: 'Montserrat', sans-serif !important;
+  padding: 6px 15px !important;
+  background: #fff !important;
+  color: #000 !important;
+}
+
+/* Боковая панель (мобильное меню) */
+.side-panel {
+  background: #fff !important;
+  border-right: 1px solid #000 !important;
+}
+.side-panel .menu__link,
+.side-panel .header__collections-link {
+  color: #000 !important;
+  font-size: 14px !important;
+}
+.side-panel .menu__title {
+  font-weight: 600 !important;
+  color: #000 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+/* Телефоны и адрес в боковой панели */
+.side-panel .phone-value {
+  color: #000 !important;
+  font-size: 14px !important;
+}
+.side-panel .address {
+  color: #555 !important;
+  font-size: 13px !important;
+}
+
+/* ===== ДОБАВЛЕНО: СТИЛИ ПОДВАЛА (ДЛЯ КОНТРАСТНОСТИ) ===== */
+.footer__menu-link {
+  color: #000 !important;
+}
+.footer__menu-link:hover {
+  opacity: 0.7;
+}
+.footer__area-copyright a {
+  color: #000 !important;
+}
+.footer__area-copyright a:hover {
+  opacity: 0.7;
+}
+
+/* ===== ИСПРАВЛЕНИЕ SEO: СКРЫВАЕМ ДУБЛЬ H1 В КАТАЛОГЕ ===== */
+.widget-type_system_widget_v4_catalog_4 h1.page-headding {
+  display: none !important;
+}
+/* ===== КОНЕЦ ИСПРАВЛЕНИЯ SEO ===== */
+
+/* ===== СТИЛЬНЫЕ КНОПКИ КАТЕГОРИЙ (ВАРИАНТ 3: КОНТУР - АВТОМАТИЧЕСКИ) ===== */
+/* Этот блок автоматически находит ссылки в текстовых виджетах и меню главной страницы и превращает их в кнопки */
+.widget-type_text a, 
+.widget-type_menu a,
+.widget-type_html a,
+.page-content .text-widget a {
+  display: inline-block !important;
+  background-color: transparent !important;
+  color: #000000 !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  padding: 14px 32px !important;
+  border-radius: 50px !important;
+  text-decoration: none !important;
+  border: 2px solid #000000 !important;
+  transition: all 0.3s ease !important;
+  margin: 10px 5px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+}
+
+.widget-type_text a:hover, 
+.widget-type_menu a:hover,
+.widget-type_html a:hover,
+.page-content .text-widget a:hover {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Резервный класс, если вы все же решите использовать HTML-виджет с классом */
+.vl-category-btn {
+  display: inline-block !important;
+  background-color: transparent !important;
+  color: #000000 !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  padding: 14px 32px !important;
+  border-radius: 50px !important;
+  text-decoration: none !important;
+  border: 2px solid #000000 !important;
+  transition: all 0.3s ease !important;
+  margin: 10px 5px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+}
+
+.vl-category-btn:hover {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
+/* ===== КОНЕЦ СТИЛЕЙ КНОПОК ===== */

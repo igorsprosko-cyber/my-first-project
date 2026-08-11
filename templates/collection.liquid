@@ -1,0 +1,442 @@
+{% assign filter_active = false %}
+{% assign display_filter = false %}
+{% assign collection_size = settings.collection_count | default: "12" %}
+
+{% paginate products by collection_size %}
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;500&display=swap');
+
+    /* ----- ОБЩИЙ КОНТЕЙНЕР СТРАНИЦЫ ----- */
+    .vl-collection-page {
+      background: #fff;
+      padding: 60px 20px;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    /* ----- ЗАГОЛОВОК КОЛЛЕКЦИИ ----- */
+    .vl-collection-page h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: #000;
+      text-align: center;
+      margin: 0 0 15px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: relative;
+    }
+    .vl-collection-page h1::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 2px;
+      background: #000;
+      margin: 15px auto 0;
+    }
+
+    /* ----- ОПИСАНИЕ КОЛЛЕКЦИИ ----- */
+    .vl-collection-page .vl-collection-desc {
+      font-size: 16px;
+      color: #333;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 50px;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* ----- ХЛЕБНЫЕ КРОШКИ ----- */
+    .breadcrumb-wrapper { margin-bottom: 20px !important; }
+    .breadcrumb {
+      list-style: none !important;
+      display: flex !important;
+      flex-wrap: wrap !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      gap: 8px !important;
+    }
+    .breadcrumb-item {
+      font-family: 'Montserrat', sans-serif !important;
+      font-size: 13px !important;
+      color: #888 !important;
+      letter-spacing: 0.5px !important;
+    }
+    .breadcrumb-item a {
+      color: #000 !important;
+      text-decoration: none !important;
+      border-bottom: 1px solid transparent !important;
+      transition: border-color 0.3s !important;
+    }
+    .breadcrumb-item a:hover { border-bottom-color: #000 !important; }
+    .breadcrumb-item:not(:last-child)::after {
+      content: '/' !important;
+      margin-left: 8px !important;
+      color: #ccc !important;
+    }
+    .breadcrumb-page { color: #888 !important; }
+
+    /* ----- БЛОК СОРТИРОВКИ ----- */
+    .collection-sort.sort_main { margin-bottom: 25px !important; }
+    .collection-order.is-sort .form-control {
+      font-family: 'Montserrat', sans-serif !important;
+      font-size: 14px !important;
+      color: #000 !important;
+      background: #fff !important;
+      border: 1px solid #000 !important;
+      border-radius: 30px !important;
+      padding: 8px 15px !important;
+      min-width: 200px !important;
+      cursor: pointer !important;
+      outline: none !important;
+    }
+
+    /* ----- КАРТОЧКИ (ОСНОВА) ----- */
+    .product-preview {
+      background: #fff !important;
+      border: 1px solid #000 !important;
+      border-radius: 12px !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
+      padding: 20px 10px 20px 25px !important;
+      overflow: hidden !important;
+    }
+    .product-preview__title a {
+      font-family: 'Montserrat', sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      color: #000 !important;
+      text-decoration: none !important;
+      letter-spacing: 0.3px !important;
+    }
+    .product-preview__title { text-align: center !important; }
+    .product-preview__price-cur {
+      font-family: 'Montserrat', sans-serif !important;
+      font-size: 20px !important;
+      font-weight: 700 !important;
+      color: #000 !important;
+    }
+    .product-preview__price-old {
+      font-family: 'Montserrat', sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 400 !important;
+      color: #555 !important;
+      text-decoration: line-through !important;
+      margin-right: 8px !important;
+    }
+    .product-preview__price {
+      margin: 8px 0 !important;
+      text-align: center !important;
+      width: 100% !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: baseline !important;
+      gap: 6px !important;
+    }
+
+    /* ----- ДЕСКТОП (>1024px): иконки вертикально справа ----- */
+    .product-preview__area-bottom {
+      display: flex !important;
+      justify-content: flex-end !important;
+      align-items: center !important;
+    }
+    .product-preview__controls-left {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      gap: 5px;
+      margin-left: 0 !important;
+    }
+    .product-preview__controls-left .button {
+      font-size: 18px !important;
+      color: #000 !important;
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      line-height: 1 !important;
+    }
+    .product-preview__controls-left .button:hover { opacity: 0.6; }
+    .product-preview__controls { margin-left: 10px !important; }
+    .add-cart-counter__btn,
+    .product-preview__controls .button {
+      font-family: 'Montserrat', sans-serif !important;
+      background: transparent !important;
+      color: #000 !important;
+      border: 2px solid #000 !important;
+      border-radius: 30px !important;
+      padding: 6px 18px !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      letter-spacing: 1px !important;
+      text-transform: uppercase !important;
+      transition: all 0.3s !important;
+    }
+    .add-cart-counter__btn:hover,
+    .product-preview__controls .button:hover {
+      background: #000 !important;
+      color: #fff !important;
+    }
+
+    /* 📱 ПЛАНШЕТЫ И УЗКИЕ ОКНА (≤1024px) */
+    @media (max-width: 1024px) {
+      .product-preview {
+        padding: 15px 8px !important;
+      }
+      .product-preview__area-bottom {
+        display: block !important;
+        width: 100% !important;
+      }
+      .product-preview__controls {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: clamp(6px, 1.2vw, 12px) !important;
+        width: 100% !important;
+        margin: 10px 0 0 0 !important;
+        padding: 0 !important;
+      }
+      .product-preview__controls-left {
+        display: contents !important;
+      }
+      .product-preview__controls-left .button {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        font-size: clamp(16px, 2.5vw, 22px) !important;
+        color: #000 !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+      }
+      .add-cart-counter {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+      }
+      .add-cart-counter__btn,
+      .product-preview__controls .button {
+        font-size: clamp(11px, 1.5vw, 13px) !important;
+        padding: 4px 8px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+      }
+    }
+
+    /* ----- ПАГИНАЦИЯ ----- */
+    .pagination {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      gap: 30px !important;
+      margin-top: 40px !important;
+      list-style: none !important;
+      padding: 0 !important;
+    }
+    .pagination a,
+    .pagination__item a,
+    .pagination .page-link {
+      font-family: 'Montserrat', sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      color: #000 !important;
+      text-decoration: none !important;
+      border: none !important;
+      background: transparent !important;
+      padding: 0 4px !important;
+      transition: opacity 0.3s !important;
+    }
+    .pagination a:hover,
+    .pagination__item a:hover,
+    .pagination .page-link:hover {
+      opacity: 0.6;
+      background: transparent !important;
+      color: #000 !important;
+    }
+    .pagination .active a,
+    .pagination__item.active a,
+    .pagination .page-item.active .page-link {
+      font-weight: 700 !important;
+      color: #000 !important;
+      background: transparent !important;
+      border-bottom: 2px solid #000 !important;
+      padding-bottom: 2px !important;
+      border-radius: 0 !important;
+    }
+
+    /* =========================================== */
+    /* ----- СТИЛИЗАЦИЯ БОКОВОЙ ПАНЕЛИ ФИЛЬТРОВ ----- */
+    /* =========================================== */
+    .filter__content {
+      border: 1px solid #000 !important;
+      border-radius: 12px !important;
+      padding: 20px 25px !important;
+      background: #fff !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
+      font-family: 'Montserrat', sans-serif !important;
+      margin-bottom: 30px !important;
+    }
+    .filter__head {
+      border-bottom: 1px solid #000 !important;
+      padding-bottom: 15px !important;
+      margin-bottom: 15px !important;
+    }
+    .filter__head-title {
+      font-size: 18px !important;
+      font-weight: 700 !important;
+      color: #000 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 1px !important;
+    }
+    .only_available {
+      padding: 1rem 0 !important;
+      border-bottom: 1px solid #e0e0e0 !important;
+    }
+    .filter-option._checkbox .filter-option__label {
+      font-family: 'Montserrat', sans-serif !important;
+      font-size: 14px !important;
+      color: #000 !important;
+    }
+    .filter-option._checkbox .filter-option__btn.icon-check {
+      border: 1px solid #000 !important;
+      border-radius: 4px !important;
+      background: transparent !important;
+    }
+    .filter-item__head {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      padding: 12px 0 !important;
+      border-bottom: 1px solid #e0e0e0 !important;
+      cursor: pointer !important;
+    }
+    .filter-item__name {
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      color: #000 !important;
+      text-transform: none !important;
+    }
+    .filter-item__head .icon {
+      font-size: 12px !important;
+      color: #000 !important;
+      transition: transform 0.2s !important;
+    }
+    .filter-item__content { padding: 10px 0 !important; }
+    .filter-range__field {
+      border: 1px solid #000 !important;
+      border-radius: 30px !important;
+      padding: 6px 12px !important;
+      font-size: 14px !important;
+      width: 80px !important;
+      text-align: center !important;
+      background: #fff !important;
+      color: #000 !important;
+      font-family: 'Montserrat', sans-serif !important;
+    }
+    .filter-range__values-label {
+      font-size: 12px !important;
+      color: #555 !important;
+      text-transform: uppercase !important;
+      margin-right: 5px !important;
+    }
+    .noUi-target {
+      border: 1px solid #000 !important;
+      border-radius: 30px !important;
+      background: #f9f9f9 !important;
+      box-shadow: none !important;
+      height: 4px !important;
+    }
+    .noUi-connect { background: #000 !important; }
+    .noUi-handle {
+      border: 2px solid #000 !important;
+      border-radius: 50% !important;
+      background: #fff !important;
+      box-shadow: none !important;
+      width: 18px !important;
+      height: 18px !important;
+      top: -8px !important;
+      cursor: pointer !important;
+    }
+    .noUi-handle:before,
+    .noUi-handle:after { display: none !important; }
+    .filter-item__list-item { margin-bottom: 8px !important; }
+    .filter-option__label {
+      font-family: 'Montserrat', sans-serif !important;
+      font-size: 14px !important;
+      color: #000 !important;
+    }
+    .filter-option__btn.icon-check {
+      border: 1px solid #000 !important;
+      border-radius: 4px !important;
+      background: transparent !important;
+    }
+    .count {
+      font-size: 12px !important;
+      color: #777 !important;
+      margin-left: 5px !important;
+    }
+    .filter__controls { margin-top: 20px !important; }
+    .filter__controls .button,
+    .filter__reset-btn {
+      display: inline-block !important;
+      width: 100% !important;
+      padding: 12px 20px !important;
+      font-family: 'Montserrat', sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      letter-spacing: 1px !important;
+      text-transform: uppercase !important;
+      border: 2px solid #000 !important;
+      border-radius: 30px !important;
+      background: transparent !important;
+      color: #000 !important;
+      text-align: center !important;
+      transition: all 0.3s !important;
+      margin-bottom: 10px !important;
+      cursor: pointer !important;
+    }
+    .filter__controls .button:hover,
+    .filter__reset-btn:hover {
+      background: #000 !important;
+      color: #fff !important;
+    }
+    .filter__reset-btn {
+      border: 1px solid #000 !important;
+      background: transparent !important;
+      color: #000 !important;
+    }
+    .filter__reset-btn:hover {
+      background: #000 !important;
+      color: #fff !important;
+    }
+    @media (max-width: 768px) {
+      .filter__content { padding: 15px !important; }
+    }
+
+    /* ----- КНОПКА "ВЕРНУТЬСЯ НА ГЛАВНУЮ" ----- */
+    .vl-back-link {
+      display: block;
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      letter-spacing: 1px;
+      color: #000;
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+    .vl-back-link:hover { border-color: #000; }
+  </style>
+
+  <section class="vl-collection-page">
+
+    {% for widgetDrop in widget_lists.collection-list.widgets %}
+      {% widget widgetDrop %}
+    {% endfor %}
+
+    <a href="/" class="vl-back-link">← Вернуться на главную</a>
+  </section>
+
+{% endpaginate %}

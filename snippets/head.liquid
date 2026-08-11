@@ -1,0 +1,158 @@
+<!-- ========================================== -->
+<!-- ОСНОВНЫЕ МЕТА-ТЕГИ                         -->
+<!-- ========================================== -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE">
+<meta name="format-detection" content="telephone=no">
+
+<!-- ========================================== -->
+<!-- ROBOTS (индексация и следование)          -->
+<!-- ========================================== -->
+<meta name="robots" content="index,follow">
+<meta name="googlebot" content="index,follow">
+<meta name="yandex" content="index,follow">
+
+<!-- ========================================== -->
+<!-- VERIFICATION (для Яндекс и Google)        -->
+<!-- ========================================== -->
+<!-- <meta name="yandex-verification" content="XXXXXXXXXX" /> -->
+<!-- <meta name="google-site-verification" content="XXXXXXXXXX" /> -->
+
+<!-- ========================================== -->
+<!-- CANONICAL URL                             -->
+<!-- ========================================== -->
+{%- if template contains "collection" -%}
+  {%- if filter -%}
+    {%- assign canon = filter.handle -%}
+    <link rel="canonical" href="{{ account.url }}{{ collection.url }}/{{ canon }}">
+  {%- else -%}
+    <link rel="canonical" href="{{ account.url }}{{ collection.url }}">
+  {%- endif -%}
+{%- elsif template contains "product" -%}
+  <link rel="canonical" href="{{ account.url }}{{ product.canonical_url }}">
+{%- elsif template contains "page" -%}
+  <link rel="canonical" href="{{ account.url }}{{ page.url }}">
+{%- elsif template contains "blog" -%}
+  <link rel="canonical" href="{{ account.url }}{{ blog.url }}">
+{%- elsif template contains "article" -%}
+  <link rel="canonical" href="{{ account.url }}{{ article.url }}">
+{%- else -%}
+  <link rel="canonical" href="{{ account.url }}{{ request.path }}">
+{%- endif -%}
+
+<!-- ========================================== -->
+<!-- RSS (для блога)                           -->
+<!-- ========================================== -->
+{%- if template == "blog" -%}
+  <link rel="alternate" type="application/rss+xml" title="{{ blog.title }}" href="{{ account.url }}{{ blog.url }}.atom">
+{%- endif -%}
+
+<!-- ========================================== -->
+<!-- SEO-ШАБЛОНЫ: TITLE И DESCRIPTION (Liquid)  -->
+<!-- ========================================== -->
+
+<!-- ГЛАВНАЯ СТРАНИЦА (B2B ФОКУС) -->
+{% if template == "index" %}
+  <title>Производитель мебельных опор и фурнитуры Veles Legs | Опт и производство</title>
+  <meta name="description" content="Производство и оптовые поставки мебельных опор из дерева и металла для фабрик и производств. Изготовление по чертежам, фурнитура, контроль качества. Доставка по РФ.">
+{% endif %}
+
+<!-- КАТЕГОРИИ (КОЛЛЕКЦИИ) -->
+{% if template contains "collection" %}
+  <title>{{ collection.title }} | Veles Legs — производство мебельных опор</title>
+  <meta name="description" content="{{ collection.title }} от производителя Veles Legs. В наличии {{ collection.products_count_without_cache }} позиций. Оптовые поставки, изготовление по чертежам. Доставка по РФ.">
+{% endif %}
+
+<!-- ТОВАРЫ (ПРОДУКТЫ) -->
+{% if template contains "product" %}
+  <title>{{ product.title }} – цена {{ product.price | money }} | Veles Legs — производитель опор</title>
+  <meta name="description" content="{{ product.title | remove: '"' }}. Цена {{ product.price | money }}. В наличии на складе производителя. Оптовые поставки по РФ. Изготовление по чертежам.">
+{% endif %}
+
+<!-- СТАТЬИ БЛОГА -->
+{% if template contains "article" %}
+  <title>{{ article.title }} | Блог Veles Legs</title>
+  <meta name="description" content="{{ article.excerpt_or_content | strip_html | strip_newlines | escape | truncate: 200 }}">
+{% endif %}
+
+<!-- СТРАНИЦЫ (О НАС, ДОСТАВКА и т.д.) -->
+{% if template contains "page" %}
+  <title>{{ page.title }} | Veles Legs</title>
+  <meta name="description" content="{{ page.content | strip_html | strip_newlines | escape | truncate: 200 | default: 'Информация о компании Veles Legs' }}">
+{% endif %}
+
+<!-- КОРЗИНА -->
+{% if template contains "cart" %}
+  <title>Корзина | Veles Legs</title>
+  <meta name="description" content="Ваша корзина товаров. Оформите оптовый заказ на мебельные опоры Veles Legs.">
+{% endif %}
+
+<!-- ПОИСК -->
+{% if template contains "search" %}
+  <title>Поиск | Veles Legs</title>
+  <meta name="description" content="Результаты поиска товаров в каталоге производителя Veles Legs.">
+{% endif %}
+
+<!-- ========================================== -->
+<!-- МИКРОРАЗМЕТКА SCHEMA.ORG (JSON-LD)        -->
+<!-- ========================================== -->
+
+<!-- Organization (все страницы) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "ВЕЛЕС, ФК, ООО",
+  "alternateName": "Veles Legs",
+  "url": "https://veles-legs.ru",
+  "logo": "{{ 'logo.png' | asset_url }}",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+7-499-290-52-00",
+    "contactType": "Sales",
+    "areaServed": "RU",
+    "availableLanguage": "Russian"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ул. Большая Серпуховская, 43",
+    "addressLocality": "Подольск",
+    "addressRegion": "Московская область",
+    "postalCode": "142100",
+    "addressCountry": "RU"
+  },
+  "sameAs": [
+    "https://vk.com/veleslegs",
+    "https://t.me/veleslegs"
+  ]
+}
+</script>
+
+<!-- ========================================== -->
+<!-- ИКОНКИ (FAVICON)                           -->
+<!-- ========================================== -->
+{% include "system_favicon" %}
+
+<!-- ========================================== -->
+<!-- СТИЛИ (для предотвращения FOUC)            -->
+<!-- ========================================== -->
+<style media="screen">
+  @supports (content-visibility: hidden) {
+    body:not(.settings_loaded) {
+      content-visibility: hidden;
+    }
+  }
+  @supports not (content-visibility: hidden) {
+    body:not(.settings_loaded) {
+      visibility: hidden;
+    }
+  }
+</style>
+
+<!-- ========================================== -->
+<!-- СИСТЕМНЫЕ ВКЛЮЧЕНИЯ INSALES                -->
+<!-- ========================================== -->
+{%- include "system_seo_description" -%}
+{%- include "system_v4_meta_data" -%}

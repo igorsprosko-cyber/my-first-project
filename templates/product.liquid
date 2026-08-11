@@ -1,0 +1,621 @@
+<!-- СТРАНИЦА ТОВАРА (в стиле layout.liquid) -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;500&display=swap');
+
+  .vl-product-wrapper {
+    background: #fff;
+    padding: 60px 20px;
+    font-family: 'Montserrat', sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ----- ЗАГОЛОВОК ТОВАРА ----- */
+  .vl-product-wrapper .product__title,
+  .vl-product-wrapper .product-title,
+  .vl-product-wrapper h1.product-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #000;
+    margin: 0 0 10px;
+    line-height: 1.2;
+  }
+
+  /* ----- КОНТЕЙНЕР ИЗОБРАЖЕНИЯ (с рамкой) ----- */
+  .vl-product-wrapper .product__image,
+  .vl-product-wrapper .product-image,
+  .vl-product-wrapper .product-photo,
+  .vl-product-wrapper .product__photo,
+  .vl-product-wrapper .product-gallery,
+  .vl-product-wrapper .product__gallery,
+  .vl-product-wrapper .product__media,
+  .vl-product-wrapper .product-media,
+  .vl-product-wrapper .product__main-image,
+  .vl-product-wrapper .product-main-image,
+  .vl-product-wrapper .product__image-container,
+  .vl-product-wrapper .product-image-container,
+  .vl-product-wrapper .product__picture,
+  .vl-product-wrapper .product-picture,
+  .vl-product-wrapper .product__cover,
+  .vl-product-wrapper .product-cover,
+  .vl-product-wrapper [class*="product"] .image-container,
+  .vl-product-wrapper [class*="product"] .photo {
+    border: 3px solid #000 !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    display: block;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .vl-product-wrapper .product__image img,
+  .vl-product-wrapper .product-image img,
+  .vl-product-wrapper .product-photo img,
+  .vl-product-wrapper .product__photo img,
+  .vl-product-wrapper .product-gallery img,
+  .vl-product-wrapper .product__gallery img,
+  .vl-product-wrapper .product__media img,
+  .vl-product-wrapper .product-media img,
+  .vl-product-wrapper .product__main-image img,
+  .vl-product-wrapper .product-main-image img,
+  .vl-product-wrapper .product__image-container img,
+  .vl-product-wrapper .product-image-container img,
+  .vl-product-wrapper .product__picture img,
+  .vl-product-wrapper .product-picture img,
+  .vl-product-wrapper .product__cover img,
+  .vl-product-wrapper .product-cover img,
+  .vl-product-wrapper [class*="product"] .image-container img,
+  .vl-product-wrapper [class*="product"] .photo img {
+    border: none !important;
+    border-radius: 0 !important;
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .vl-product-wrapper .product__image img,
+  .vl-product-wrapper .product-image img,
+  .vl-product-wrapper .product-photo img,
+  .vl-product-wrapper .product__photo img,
+  .vl-product-wrapper .product-gallery img,
+  .vl-product-wrapper .product__gallery img,
+  .vl-product-wrapper .product__media img,
+  .vl-product-wrapper .product-media img,
+  .vl-product-wrapper .product__main-image img,
+  .vl-product-wrapper .product-main-image img,
+  .vl-product-wrapper .product__image-container img,
+  .vl-product-wrapper .product-image-container img,
+  .vl-product-wrapper .product__picture img,
+  .vl-product-wrapper .product-picture img,
+  .vl-product-wrapper .product__cover img,
+  .vl-product-wrapper .product-cover img,
+  .vl-product-wrapper [class*="product"] .image-container img,
+  .vl-product-wrapper [class*="product"] .photo img {
+    max-width: 100% !important;
+    max-height: 500px !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+
+  /* ----- ЦЕНА ----- */
+  .vl-product-wrapper .product__price,
+  .vl-product-wrapper .product-price,
+  .vl-product-wrapper .price {
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 20px;
+  }
+  .vl-product-wrapper .product__price .old-price,
+  .vl-product-wrapper .product-price .old-price,
+  .vl-product-wrapper .price .old-price {
+    font-size: 20px;
+    font-weight: 400;
+    color: #555;
+    text-decoration: line-through;
+    margin-left: 12px;
+  }
+
+  /* ----- КНОПКИ (корзина, купить) ----- */
+  .vl-product-wrapper .product__cart,
+  .vl-product-wrapper .product__buy,
+  .vl-product-wrapper .add-cart,
+  .vl-product-wrapper .btn-buy,
+  .vl-product-wrapper .product__add-to-cart button,
+  .vl-product-wrapper .product__buy-button {
+    font-family: 'Montserrat', sans-serif;
+    background: #000;
+    color: #fff;
+    border: 2px solid #000;
+    border-radius: 30px;
+    padding: 10px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    cursor: pointer;
+    display: inline-block;
+    margin: 5px 5px 5px 0;
+  }
+  .vl-product-wrapper .product__cart:hover,
+  .vl-product-wrapper .product__buy:hover,
+  .vl-product-wrapper .add-cart:hover,
+  .vl-product-wrapper .btn-buy:hover,
+  .vl-product-wrapper .product__add-to-cart button:hover,
+  .vl-product-wrapper .product__buy-button:hover {
+    background: #fff;
+    color: #000;
+  }
+
+  /* ----- ОПИСАНИЕ, ХАРАКТЕРИСТИКИ, ОТЗЫВЫ ----- */
+  .vl-product-wrapper .product__description,
+  .vl-product-wrapper .product-description,
+  .vl-product-wrapper .product__content,
+  .vl-product-wrapper .product__characteristics,
+  .vl-product-wrapper .characteristics,
+  .vl-product-wrapper .product__reviews,
+  .vl-product-wrapper .reviews,
+  .vl-product-wrapper .product__properties,
+  .vl-product-wrapper .properties {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #222;
+    margin-bottom: 30px;
+  }
+
+  /* Таблицы характеристик */
+  .vl-product-wrapper .product__characteristics table,
+  .vl-product-wrapper .characteristics table,
+  .vl-product-wrapper .product__properties table,
+  .vl-product-wrapper .properties table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    border: 1px solid #000;
+  }
+  .vl-product-wrapper .product__characteristics table th,
+  .vl-product-wrapper .characteristics table th,
+  .vl-product-wrapper .product__properties table th,
+  .vl-product-wrapper .properties table th,
+  .vl-product-wrapper .product__characteristics table td,
+  .vl-product-wrapper .characteristics table td,
+  .vl-product-wrapper .product__properties table td,
+  .vl-product-wrapper .properties table td {
+    border: 1px solid #000;
+    padding: 8px 12px;
+    text-align: left;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+  }
+  .vl-product-wrapper .product__characteristics table th,
+  .vl-product-wrapper .characteristics table th,
+  .vl-product-wrapper .product__properties table th,
+  .vl-product-wrapper .properties table th {
+    background: #f9f9f9;
+    font-weight: 600;
+  }
+
+  /* Отзывы */
+  .vl-product-wrapper .product__reviews .review,
+  .vl-product-wrapper .reviews .review {
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+  }
+  .vl-product-wrapper .product__reviews .review:last-child,
+  .vl-product-wrapper .reviews .review:last-child {
+    border-bottom: none;
+  }
+  .vl-product-wrapper .product__reviews .review .review-author,
+  .vl-product-wrapper .reviews .review .review-author {
+    font-weight: 600;
+    color: #000;
+  }
+  .vl-product-wrapper .product__reviews .review .review-date,
+  .vl-product-wrapper .reviews .review .review-date {
+    font-size: 13px;
+    color: #888;
+  }
+  .vl-product-wrapper .product__reviews .review .review-text,
+  .vl-product-wrapper .reviews .review .review-text {
+    margin-top: 5px;
+    color: #333;
+  }
+
+  /* Заголовки внутри контента */
+  .vl-product-wrapper .product__description h2,
+  .vl-product-wrapper .product-description h2,
+  .vl-product-wrapper .product__content h2,
+  .vl-product-wrapper .product__characteristics h2,
+  .vl-product-wrapper .characteristics h2,
+  .vl-product-wrapper .product__reviews h2,
+  .vl-product-wrapper .reviews h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin: 30px 0 15px;
+  }
+  .vl-product-wrapper .product__description h3,
+  .vl-product-wrapper .product-description h3,
+  .vl-product-wrapper .product__content h3,
+  .vl-product-wrapper .product__characteristics h3,
+  .vl-product-wrapper .characteristics h3,
+  .vl-product-wrapper .product__reviews h3,
+  .vl-product-wrapper .reviews h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #000;
+    margin: 25px 0 10px;
+  }
+
+  /* Списки */
+  .vl-product-wrapper .product__description ul,
+  .vl-product-wrapper .product-description ul,
+  .vl-product-wrapper .product__content ul,
+  .vl-product-wrapper .product__description ol,
+  .vl-product-wrapper .product-description ol,
+  .vl-product-wrapper .product__content ol,
+  .vl-product-wrapper .product__characteristics ul,
+  .vl-product-wrapper .characteristics ul,
+  .vl-product-wrapper .product__reviews ul,
+  .vl-product-wrapper .reviews ul {
+    padding-left: 25px;
+  }
+
+  /* ----- ДОПОЛНИТЕЛЬНЫЕ ДЕЙСТВИЯ (избранное, сравнение) ----- */
+  .vl-product-wrapper .product__actions,
+  .vl-product-wrapper .product-actions {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .vl-product-wrapper .product__actions a,
+  .vl-product-wrapper .product-actions a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .vl-product-wrapper .product__actions a:hover,
+  .vl-product-wrapper .product-actions a:hover {
+    border-color: #000;
+  }
+
+  /* ----- ХЛЕБНЫЕ КРОШКИ ----- */
+  .vl-product-wrapper .breadcrumb,
+  .vl-product-wrapper .breadcrumbs {
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: #888;
+  }
+  .vl-product-wrapper .breadcrumb a,
+  .vl-product-wrapper .breadcrumbs a {
+    color: #000;
+    text-decoration: none;
+  }
+  .vl-product-wrapper .breadcrumb a:hover,
+  .vl-product-wrapper .breadcrumbs a:hover {
+    text-decoration: underline;
+  }
+
+  /* ----- КНОПКА "ВЕРНУТЬСЯ НА ГЛАВНУЮ" (без подчёркивания) ----- */
+  .vl-back-link {
+    display: block;
+    text-align: center;
+    margin-top: 40px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 10px 0;
+  }
+  .vl-back-link:hover {
+    color: #000;
+  }
+
+  /* ----- АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ ----- */
+  @media (max-width: 768px) {
+    .vl-product-wrapper {
+      padding: 40px 15px;
+    }
+    .vl-product-wrapper .product__title,
+    .vl-product-wrapper .product-title,
+    .vl-product-wrapper h1.product-title {
+      font-size: 28px;
+    }
+    .vl-product-wrapper .product__image img,
+    .vl-product-wrapper .product-image img,
+    .vl-product-wrapper .product-photo img,
+    .vl-product-wrapper .product__photo img,
+    .vl-product-wrapper .product-gallery img,
+    .vl-product-wrapper .product__gallery img,
+    .vl-product-wrapper .product__media img,
+    .vl-product-wrapper .product-media img,
+    .vl-product-wrapper .product__main-image img,
+    .vl-product-wrapper .product-main-image img,
+    .vl-product-wrapper .product__image-container img,
+    .vl-product-wrapper .product-image-container img,
+    .vl-product-wrapper .product__picture img,
+    .vl-product-wrapper .product-picture img,
+    .vl-product-wrapper .product__cover img,
+    .vl-product-wrapper .product-cover img,
+    .vl-product-wrapper [class*="product"] .image-container img,
+    .vl-product-wrapper [class*="product"] .photo img {
+      max-height: 300px !important;
+    }
+    .vl-product-wrapper .product__price,
+    .vl-product-wrapper .product-price,
+    .vl-product-wrapper .price {
+      font-size: 24px;
+    }
+    .vl-product-wrapper .product__cart,
+    .vl-product-wrapper .product__buy,
+    .vl-product-wrapper .add-cart,
+    .vl-product-wrapper .btn-buy,
+    .vl-product-wrapper .product__add-to-cart button,
+    .vl-product-wrapper .product__buy-button {
+      padding: 8px 20px;
+      font-size: 14px;
+    }
+    .vl-product-wrapper .product__characteristics table,
+    .vl-product-wrapper .characteristics table,
+    .vl-product-wrapper .product__properties table,
+    .vl-product-wrapper .properties table {
+      font-size: 13px;
+    }
+  }
+
+  /* =========================================== */
+  /* ----- СТИЛИ ДЛЯ АВТОМАТИЧЕСКОГО ОПИСАНИЯ ----- */
+  /* =========================================== */
+  .vl-auto-description {
+    margin-top: 40px;
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #000;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  }
+  .vl-auto-description h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin: 30px 0 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #000;
+  }
+  .vl-auto-description h2:first-child {
+    margin-top: 0;
+  }
+  .vl-auto-description p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #222;
+    margin-bottom: 15px;
+  }
+  .vl-auto-description ul {
+    padding-left: 25px;
+    margin-bottom: 15px;
+  }
+  .vl-auto-description li {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #222;
+    margin-bottom: 8px;
+  }
+  .vl-auto-description strong {
+    color: #000;
+    font-weight: 600;
+  }
+</style>
+
+<div class="vl-product-wrapper">
+  <!-- ===== МИКРОРАЗМЕТКА SCHEMA.ORG ДЛЯ ТОВАРА (ПОЛНАЯ B2B С АВТО-ХАРАКТЕРИСТИКАМИ) ===== -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "{{ product.title | escape }}",
+      "description": "{{ product.description | strip_html | strip_newlines | escape | truncate: 300 }}",
+      "sku": "{{ product.variants.first.sku | escape }}",
+      "brand": {
+        "@type": "Brand",
+        "name": "Veles Legs"
+      },
+      "manufacturer": {
+        "@type": "Organization",
+        "name": "ВЕЛЕС, ФК, ООО",
+        "description": "Производитель мебельных опор из дерева и металла",
+        "url": "https://veles-legs.ru"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "RUB",
+        "lowPrice": "{{ product.variants.first.price | money_without_currency | replace: ',', '.' | replace: ' ', '' }}",
+        "highPrice": "{{ product.variants.last.price | money_without_currency | replace: ',', '.' | replace: ' ', '' }}",
+        "offerCount": "{{ product.variants.size }}",
+        "availability": "{% if product.variants.first.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+        "url": "https://veles-legs.ru{{ product.url }}",
+        "seller": {
+          "@type": "Organization",
+          "name": "Veles Legs"
+        },
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": "RU",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": 14,
+          "returnMethod": "https://schema.org/ReturnByMail",
+          "returnFees": "https://schema.org/FreeReturn"
+        },
+        "shippingDetails": [
+          {
+            "@type": "OfferShippingDetails",
+            "shippingRate": {
+              "@type": "MonetaryAmount",
+              "value": 0,
+              "currency": "RUB"
+            },
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": "RU"
+            },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "businessDays": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": [
+                  "https://schema.org/Monday",
+                  "https://schema.org/Tuesday",
+                  "https://schema.org/Wednesday",
+                  "https://schema.org/Thursday",
+                  "https://schema.org/Friday"
+                ]
+              },
+              "cutoffTime": "18:00",
+              "handlingTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 0,
+                "maxValue": 1,
+                "unitCode": "DAY"
+              },
+              "transitTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 1,
+                "maxValue": 5,
+                "unitCode": "DAY"
+              }
+            }
+          }
+        ]
+      },
+      "image": [
+        "{% if product.images.first.original_url %}{{ product.images.first.original_url }}{% elsif product.default_image.original_url %}{{ product.default_image.original_url }}{% else %}https://veles-legs.ru/assets/no-image.jpg{% endif %}"
+      ],
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "Минимальный заказ",
+          "value": "От 100 штук"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Тип продажи",
+          "value": "Опт"
+        }{% for characteristic in product.characteristics %},
+        {
+          "@type": "PropertyValue",
+          "name": "{{ characteristic.property.title | escape }}",
+          "value": "{{ characteristic.title | escape }}"
+        }{% endfor %}
+      ]
+    }
+  </script>
+  <!-- ===== КОНЕЦ МИКРОРАЗМЕТКИ ===== -->
+
+  <!-- ===== ЗАГОЛОВОК ТОВАРА ===== -->
+  <h1 class="product-title">{{ product.title }}</h1>
+
+  <!-- ВИДЖЕТ ТОВАРА -->
+  {% for widgetDrop in widget_lists.product-list.widgets %}
+    {% widget widgetDrop %}
+  {% endfor %}
+
+  <!-- ===== АВТОМАТИЧЕСКОЕ HTML-ОПИСАНИЕ ТОВАРА ===== -->
+  {% if product.characteristics.size > 0 %}
+  <div class="vl-auto-description">
+    <h2>Общее описание</h2>
+    <p><strong>{{ product.title }}</strong> — высококачественная мебельная опора от российского производителя Veles Legs. Изготовлена с соблюдением строгих стандартов качества, предназначена для установки на диваны, кровати, кресла и корпусную мебель. Надёжная конструкция обеспечивает долговечность эксплуатации.</p>
+
+    <h2>Ключевые характеристики</h2>
+    <ul>
+      {% for characteristic in product.characteristics %}
+        <li><strong>{{ characteristic.property.title }}:</strong> {{ characteristic.title }}</li>
+      {% endfor %}
+    </ul>
+
+    <h2>Преимущества</h2>
+    <ul>
+      <li>Высокое качество материалов и сборки.</li>
+      <li>Надёжная фиксация и простота монтажа.</li>
+      <li>Эстетичный внешний вид, подходит для современных и классических интерьеров.</li>
+      <li>Подходит для многократного использования в условиях высоких нагрузок.</li>
+      <li>Производство в России — гарантия соответствия ГОСТам.</li>
+    </ul>
+
+    <h2>Индивидуальное изготовление</h2>
+    <p>По вашему запросу мы изготавливаем опоры <strong>нестандартных габаритов</strong> — с изменённой высотой, диаметром, типом крепления или заглушки. Геометрия, финишное покрытие и материал согласовываются индивидуально. Строгое соблюдение технологий гарантирует безупречное качество каждой партии.</p>
+
+    <h2>Условия заказа</h2>
+    <ul>
+      <li>✅ Минимальный заказ — от 100 штук (для оптовых клиентов).</li>
+      <li>✅ Изготовление от 5 рабочих дней.</li>
+      <li>✅ Доставка по согласованию транспортной компанией в пределах Подольска.</li>
+      <li>✅ Гарантия качества на все изделия.</li>
+    </ul>
+
+    <h2>Где применяется</h2>
+    <ul>
+      <li>диваны и кресла;</li>
+      <li>кровати и матрасные основания;</li>
+      <li>корпусная мебель (столы, стулья, тумбы);</li>
+      <li>специализированная мебель (медицинская, офисная).</li>
+    </ul>
+
+    <p><strong>Для заказа или консультации свяжитесь с нами по телефону или email — мы поможем подобрать оптимальное решение для вашего проекта.</strong></p>
+  </div>
+  {% endif %}
+  <!-- ===== КОНЕЦ АВТОМАТИЧЕСКОГО ОПИСАНИЯ ===== -->
+
+  <!-- КНОПКА НАЗАД (без подчёркивания) -->
+  <a href="/" class="vl-back-link" aria-label="Вернуться на главную страницу">← Вернуться на главную</a>
+</div>
+
+<!-- ===== СКРИПТ ДЛЯ УЛУЧШЕНИЯ ДОСТУПНОСТИ И СКОРОСТИ ===== -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Добавляем aria-label к кнопкам корзины
+  var cartButtons = document.querySelectorAll('.product__cart, .product__buy, .add-cart, .btn-buy, .product__add-to-cart button, .product__buy-button');
+  cartButtons.forEach(function(btn) {
+    if (!btn.hasAttribute('aria-label')) {
+      btn.setAttribute('aria-label', 'Добавить товар в корзину');
+    }
+  });
+
+  // Добавляем aria-label к ссылкам избранного и сравнения
+  var favoriteLinks = document.querySelectorAll('.product__actions a[href*="favorite"]');
+  favoriteLinks.forEach(function(link) {
+    if (!link.hasAttribute('aria-label')) {
+      link.setAttribute('aria-label', 'Добавить в избранное');
+    }
+  });
+
+  var compareLinks = document.querySelectorAll('.product__actions a[href*="compare"]');
+  compareLinks.forEach(function(link) {
+    if (!link.hasAttribute('aria-label')) {
+      link.setAttribute('aria-label', 'Добавить к сравнению');
+    }
+  });
+
+  // БЕЗОПАСНАЯ ОПТИМИЗАЦИЯ: Приоритет для главного фото БЕЗ изменения размеров (чтобы не было сдвигов CLS)
+  var productImg = document.querySelector('.vl-product-wrapper .product__image img, .vl-product-wrapper .product-image img, .vl-product-wrapper .product-photo img');
+  if (productImg) {
+    productImg.removeAttribute('loading');
+    productImg.setAttribute('loading', 'eager');
+    productImg.setAttribute('fetchpriority', 'high');
+  }
+});
+</script>
+<!-- ===== КОНЕЦ СКРИПТА ===== -->
