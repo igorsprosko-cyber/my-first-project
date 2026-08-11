@@ -1,0 +1,375 @@
+<div class="vl-article-wrapper">
+  <!-- ===== МИКРОРАЗМЕТКА SCHEMA.ORG ДЛЯ СТАТЬИ ===== -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "{{ article.title | escape }}",
+      "description": "{{ article.excerpt_or_content | strip_html | strip_newlines | escape | truncate: 200 }}",
+      "datePublished": "{{ article.published_at | date: '%Y-%m-%d' }}",
+      "dateModified": "{{ article.published_at | date: '%Y-%m-%d' }}",
+      "author": {
+        "@type": "Person",
+        "name": "{{ article.author | default: 'Veles Legs' | escape }}"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Veles Legs",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://veles-legs.ru/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://veles-legs.ru{{ article.url }}"
+      },
+      "image": "{{ img_url | default: '' }}"
+    }
+  </script>
+  <!-- ===== КОНЕЦ МИКРОРАЗМЕТКИ ===== -->
+
+  <h1 class="vl-article-title">{{ article.title }}</h1>
+
+  <div class="vl-article-meta">
+    {% if article.author %}
+      <span class="vl-author">✍️ {{ article.author }}</span>
+    {% endif %}
+    <span class="vl-date">📅 {{ article.published_at | date: "%d.%m.%Y" }}</span>
+  </div>
+
+  <!-- ===== ИЗОБРАЖЕНИЕ-ОБЛОЖКА (БЕЗ РАМКИ) ===== -->
+  {% assign img_url = '' %}
+  {% if article.image and article.image.url != blank %}
+    {% assign raw = article.image.url %}
+    {% if raw contains 'http' %}{% assign img_url = raw %}{% else %}{% assign img_url = raw | prepend: 'https:' %}{% endif %}
+  {% elsif article.image and article.image.src != blank %}
+    {% assign raw = article.image.src %}
+    {% if raw contains 'http' %}{% assign img_url = raw %}{% else %}{% assign img_url = raw | prepend: 'https:' %}{% endif %}
+  {% elsif article.content contains '<img' %}
+    {% assign content_parts = article.content | split: '<img' %}
+    {% if content_parts.size > 1 %}
+      {% assign img_tag = content_parts[1] | split: '>' | first %}
+      {% assign src_parts = img_tag | split: 'src="' %}
+      {% if src_parts.size > 1 %}
+        {% assign src_value = src_parts[1] | split: '"' | first %}
+        {% if src_value contains 'http' %}{% assign img_url = src_value %}{% else %}{% assign img_url = src_value | prepend: 'https:' %}{% endif %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+
+  {% if img_url != blank %}
+    <div class="vl-article-cover">
+      <img src="{{ img_url }}" alt="{{ article.title }}" loading="lazy" width="800" height="400">
+    </div>
+  {% endif %}
+
+  <!-- ===== ВИДЖЕТ С ТОВАРАМИ ===== -->
+  <div class="vl-article-products">
+    {% for widgetDrop in widget_lists.article-list.widgets %}
+      {% widget widgetDrop %}
+    {% endfor %}
+  </div>
+
+  <!-- ===== "ЧИТАЙТЕ ТАКЖЕ" ===== -->
+  <div class="vl-related-articles">
+    <h3>Читайте также</h3>
+    <div class="vl-related-grid">
+      {% assign counter = 0 %}
+      {% for art in blogs.blog.articles %}
+        {% if art.id != article.id and counter < 4 %}
+          <a href="{{ art.url }}" class="vl-related-card">
+            <div class="vl-related-title">{{ art.title }}</div>
+            <div class="vl-related-date">{{ art.published_at | date: "%d.%m.%Y" }}</div>
+          </a>
+          {% assign counter = counter | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <a href="/" class="vl-back-link">← Вернуться на главную</a>
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;500&display=swap');
+
+  .vl-article-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    font-family: 'Montserrat', sans-serif;
+    background: #fff;
+  }
+
+  .vl-article-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #000;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .vl-article-meta {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #888;
+    font-size: 14px;
+  }
+  .vl-article-meta span { margin: 0 10px; }
+
+  /* ===== ОБЛОЖКА (без рамки) ===== */
+  .vl-article-cover {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .vl-article-cover img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* КОНТЕЙНЕР ВИДЖЕТА */
+  .vl-article-products {
+    margin: 40px 0;
+    padding: 30px 0 20px 0;
+    border-top: 2px solid #000;
+    overflow: visible !important;
+  }
+
+  /* =========================================== */
+  /* 🔴 ИСПРАВЛЕНИЕ SEO: СКРЫВАЕМ ДУБЛЬ H1       */
+  /* =========================================== */
+  /* Скрываем второй H1 в виджете article, если он есть */
+  .vl-article-products h1,
+  .vl-article-products .vl-article-title,
+  .vl-article-products .vl-article-meta,
+  .vl-article-products .vl-article-cover {
+    display: none !important;
+  }
+  /* =========================================== */
+
+  /* ===== КАРТОЧКИ ТОВАРОВ ===== */
+  .vl-article-products .product-preview {
+    background: #fff !important;
+    border: 1px solid #000 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03) !important;
+    padding: 20px 10px 20px 25px !important;
+    overflow: hidden !important;
+    margin-bottom: 25px !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+  }
+  .vl-article-products .product-preview:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08) !important;
+  }
+
+  .vl-article-products .product-preview__title a {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #000 !important;
+    text-decoration: none !important;
+    letter-spacing: 0.3px !important;
+  }
+  .vl-article-products .product-preview__title {
+    text-align: center !important;
+  }
+
+  /* ===== ЦЕНЫ В ОДНУ СТРОКУ ===== */
+  .vl-article-products .product-preview__price {
+    margin: 5px 0 !important;
+    text-align: center !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: baseline !important;
+    gap: 4px !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+  }
+  .vl-article-products .product-preview__price-cur {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+  }
+  .vl-article-products .product-preview__price-old {
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    color: #555 !important;
+    text-decoration: line-through !important;
+    margin-right: 0 !important;
+  }
+
+  /* ===== НИЖНЯЯ ПАНЕЛЬ ===== */
+  .vl-article-products .product-preview__area-bottom {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+  }
+  .vl-article-products .product-preview__controls-left {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 5px;
+    margin-left: 0 !important;
+  }
+  .vl-article-products .product-preview__controls-left .button {
+    font-size: 18px !important;
+    color: #000 !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+  }
+  .vl-article-products .product-preview__controls-left .button:hover {
+    opacity: 0.6;
+  }
+  .vl-article-products .product-preview__controls {
+    margin-left: 10px !important;
+  }
+  .vl-article-products .add-cart-counter__btn,
+  .vl-article-products .product-preview__controls .button {
+    font-family: 'Montserrat', sans-serif !important;
+    background: transparent !important;
+    color: #000 !important;
+    border: 2px solid #000 !important;
+    border-radius: 30px !important;
+    padding: 6px 18px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    transition: all 0.3s !important;
+  }
+  .vl-article-products .add-cart-counter__btn:hover,
+  .vl-article-products .product-preview__controls .button:hover {
+    background: #000 !important;
+    color: #fff !important;
+  }
+
+  /* ===== АДАПТИВНОСТЬ ===== */
+  @media (max-width: 1024px) {
+    .vl-article-products .product-preview {
+      padding: 15px 8px !important;
+    }
+    .vl-article-products .product-preview__area-bottom {
+      display: block !important;
+      width: 100% !important;
+    }
+    .vl-article-products .product-preview__controls {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: clamp(6px, 1.2vw, 12px) !important;
+      width: 100% !important;
+      margin: 10px 0 0 0 !important;
+      padding: 0 !important;
+    }
+    .vl-article-products .product-preview__controls-left {
+      display: contents !important;
+    }
+    .vl-article-products .product-preview__controls-left .button {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      font-size: clamp(16px, 2.5vw, 22px) !important;
+      color: #000 !important;
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 100% !important;
+    }
+    .vl-article-products .add-cart-counter {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      width: 100% !important;
+    }
+    .vl-article-products .add-cart-counter__btn,
+    .vl-article-products .product-preview__controls .button {
+      font-size: clamp(11px, 1.5vw, 13px) !important;
+      padding: 4px 8px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      margin: 0 !important;
+    }
+    /* Для мобильных уменьшаем шрифты цен */
+    .vl-article-products .product-preview__price-cur {
+      font-size: 14px !important;
+    }
+    .vl-article-products .product-preview__price-old {
+      font-size: 11px !important;
+    }
+    .vl-article-products .product-preview__price {
+      gap: 3px !important;
+    }
+  }
+
+  /* ===== "ЧИТАЙТЕ ТАКЖЕ" ===== */
+  .vl-related-articles {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #000;
+  }
+  .vl-related-articles h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  .vl-related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .vl-related-card {
+    background: #fff;
+    border: 1px solid #000;
+    border-radius: 12px;
+    padding: 15px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .vl-related-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+  }
+  .vl-related-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .vl-related-date {
+    font-size: 13px;
+    color: #888;
+  }
+  .vl-back-link {
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+  .vl-back-link:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .vl-article-title { font-size: 28px; }
+    .vl-related-grid { grid-template-columns: 1fr; }
+  }
+</style>

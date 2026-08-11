@@ -1,0 +1,526 @@
+{%- assign setting_show = 'sidebar_' | append: template | append: '_show' -%}
+{%- assign setting_position = 'sidebar_' | append: template | append: '_position' -%}
+{%- assign layout_delta = template | append: '_delta_sidebar' -%}
+
+{%- assign sidebar_show = settings[setting_show] -%}
+{%- assign sidebar_type = settings.type_sidebar | default: 'normal' -%}
+{%- assign sidebar_position = settings[setting_position] -%}
+
+<!DOCTYPE html>
+<html lang="ru" style="
+    {% include "system_v4_required_styles" %}
+  ">
+  <head>
+    {% include "head" %}
+
+    <!-- ===== ПРЕДВАРИТЕЛЬНОЕ ПОДКЛЮЧЕНИЕ (preconnect) для ускорения загрузки ===== -->
+    <link rel="preconnect" href="https://static.insales-cdn.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://smartcaptcha.yandexcloud.net">
+    <!-- ===== КОНЕЦ ===== -->
+
+    <!-- ===== МИКРОРАЗМЕТКА ХЛЕБНЫХ КРОШЕК (BreadcrumbList) ===== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Главная",
+          "item": "https://veles-legs.ru/"
+        }
+        {% if template contains 'collection' %}
+          {% if collection %}
+            ,
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "{{ collection.title | escape }}",
+              "item": "https://veles-legs.ru{{ collection.url }}"
+            }
+          {% endif %}
+        {% elsif template contains 'product' %}
+          {% if product %}
+            {% if product.collections.first %}
+              ,
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{{ product.collections.first.title | escape }}",
+                "item": "https://veles-legs.ru{{ product.collections.first.url }}"
+              }
+            {% endif %}
+            ,
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "{{ product.title | escape }}",
+              "item": "https://veles-legs.ru{{ product.url }}"
+            }
+          {% endif %}
+        {% elsif template contains 'article' %}
+          {% if article %}
+            ,
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Блог",
+              "item": "https://veles-legs.ru{{ blogs.blog.url }}"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "{{ article.title | escape }}",
+              "item": "https://veles-legs.ru{{ article.url }}"
+            }
+          {% endif %}
+        {% elsif template contains 'blog' %}
+          ,
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Блог",
+            "item": "https://veles-legs.ru{{ blogs.blog.url }}"
+          }
+        {% elsif template contains 'page' %}
+          {% if page %}
+            ,
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "{{ page.title | escape }}",
+              "item": "https://veles-legs.ru{{ page.url }}"
+            }
+          {% endif %}
+        {% endif %}
+      ]
+    }
+    </script>
+    <!-- ===== КОНЕЦ МИКРОРАЗМЕТКИ ХЛЕБНЫХ КРОШЕК ===== -->
+
+    <!-- ===== ДИНАМИЧЕСКИЕ OPEN GRAPH ДЛЯ ВСЕХ СТРАНИЦ ===== -->
+    {% if template contains 'article' %}
+      {% assign og_title = article.title | escape %}
+      {% assign og_description = article.excerpt_or_content | strip_html | strip_newlines | escape | truncate: 200 %}
+      {% assign og_url = article.url %}
+      {% assign og_image = img_url | default: '' %}
+    {% elsif template contains 'blog' %}
+      {% assign og_title = 'Блог Veles Legs' %}
+      {% assign og_description = 'Полезные статьи о мебельных опорах, производстве и новинках.' %}
+      {% assign og_url = blogs.blog.url %}
+      {% assign og_image = '' %}
+    {% elsif template contains 'product' %}
+      {% assign og_title = product.title | escape %}
+      {% assign og_description = product.description | strip_html | strip_newlines | escape | truncate: 200 %}
+      {% assign og_url = product.url %}
+      {% assign og_image = product.images.first.original_url | default: '' %}
+    {% elsif template contains 'collection' %}
+      {% assign og_title = collection.title | escape | append: ' | Veles Legs' %}
+      {% assign og_description = collection.description | strip_html | strip_newlines | escape | truncate: 200 %}
+      {% assign og_url = collection.url %}
+      {% assign og_image = '' %}
+    {% elsif template contains 'page' %}
+      {% assign og_title = page.title | escape | append: ' | Veles Legs' %}
+      {% assign og_description = page.content | strip_html | strip_newlines | escape | truncate: 200 %}
+      {% assign og_url = page.url %}
+      {% assign og_image = '' %}
+    {% else %}
+      {% assign og_title = 'Veles Legs | Мебельные опоры от производителя' %}
+      {% assign og_description = 'Поставляем комплектующие для фабрик России. Деревянные и металлические ножки, фурнитура. Изготовление по чертежам.' %}
+      {% assign og_url = '/' %}
+      {% assign og_image = 'https://static.insales-cdn.com/files/1/3497/103632297/original/logo.png' %}
+    {% endif %}
+
+    <meta property="og:title" content="{{ og_title }}" />
+    <meta property="og:description" content="{{ og_description }}" />
+    <meta property="og:url" content="https://veles-legs.ru{{ og_url }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Veles Legs" />
+    
+    {% if og_image != blank %}
+      <meta property="og:image" content="{{ og_image }}" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="360" />
+    {% else %}
+      <meta property="og:image" content="https://static.insales-cdn.com/files/1/3497/103632297/original/logo.png" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="360" />
+    {% endif %}
+    
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- ===== КОНЕЦ OPEN GRAPH ===== -->
+
+  </head>
+  <body data-multi-lang="{{ language.not_default? }}" data-theme-template="{{ template }}" data-sidebar-type="{{ sidebar_type }}" data-sidebar-position="{{ sidebar_position }}">
+    <div class="preloader">
+      <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    </div>
+    {% include "system_no_js_alert" %}
+    <div class="page_layout {% if sidebar_show %}page_layout_{{ sidebar_type }}_{{ sidebar_position }}{% else %}page_layout-clear{% endif %} {{- settings.fixed_sidebar_border -}} {% if template contains 'collection' %}page_layout_section_top{% endif %}">
+      <header>
+      {% for widgetDrop in widget_lists.header-list.widgets %}
+        {% widget widgetDrop %}
+      {% endfor %}
+      </header>
+
+      {% if template contains 'collection' %}
+      <section class="page_section_top">
+        {% for widgetDrop in widget_lists.collection-section_top-list.widgets %}
+          {% widget widgetDrop %}
+        {% endfor %}
+      </section>
+      {% endif %}
+
+      <main>
+        {{ content_for_layout }}
+      </main>
+
+      {% if sidebar_show or editor_mode? %}
+      <aside>
+        <section data-sidebar>
+          {% if template contains 'blog' %}
+            {% for widgetDrop in widget_lists.sidebar_blog-list.widgets %}
+              {% widget widgetDrop %}
+            {% endfor %}
+            {% elsif template contains 'collection'  %}
+                {% for widgetDrop in widget_lists.sidebar_collection-list.widgets %}
+                  {% widget widgetDrop %}
+                {% endfor %}
+            {% elsif template contains 'index' %}
+                {% for widgetDrop in widget_lists.sidebar_index-list.widgets %}
+                  {% widget widgetDrop %}
+                {% endfor %}
+            {% elsif template contains 'article' %}
+                {% for widgetDrop in widget_lists.sidebar_article-list.widgets %}
+                  {% widget widgetDrop %}
+                {% endfor %}
+            {% elsif template contains 'compare' %}
+                {% for widgetDrop in widget_lists.sidebar_compare-list.widgets %}
+                  {% widget widgetDrop %}
+                {% endfor %}
+            {% elsif template contains 'product' %}
+                {% for widgetDrop in widget_lists.sidebar_product-list.widgets %}
+                  {% widget widgetDrop %}
+                {% endfor %}
+            {% elsif template contains 'favorite' %}
+                {% for widgetDrop in widget_lists.sidebar_favorite-list.widgets %}
+                  {% widget widgetDrop %}
+                {% endfor %}
+            {% elsif template contains 'search' %}
+                {% for widgetDrop in widget_lists.sidebar_search-list.widgets %}
+                  {% widget widgetDrop %}
+                {% endfor %}
+            {% elsif template contains 'page' %}
+                {% for widgetDrop in widget_lists.sidebar_page-list.widgets %}
+                  {% widget widgetDrop %}
+                {% endfor %}
+            {% elsif template contains 'cart' %}
+                {% for widgetDrop in widget_lists.sidebar_cart-list.widgets %}
+                  {% widget widgetDrop %}
+                {% endfor %}      
+            {% endif %}
+        </section>
+      </aside>
+      {% endif %}
+
+      <footer>
+        {% for widgetDrop in widget_lists.footer-list.widgets %}
+          {% widget widgetDrop %}
+        {% endfor %}
+
+        <!-- ССЫЛКА НА БЛОГ (ВЫДЕЛЕННАЯ, ВВЕРХУ) -->
+        <div class="footer__blog-link">
+          <a href="https://veles-legs.ru/blogs/blog">
+            <span class="footer__blog-icon">📝</span>
+            Читайте наш блог
+          </a>
+        </div>
+
+        <!-- БЛОК: УЧАСТНИК ВЫСТАВКИ МЕБЕЛЬ-2024 (ГОРИЗОНТАЛЬНЫЙ) -->
+        <div class="expo-participant-card">
+          <div class="expo-badge">
+            <span class="expo-icon">🏆</span>
+            <span class="expo-title">Участник выставки</span>
+            <span class="expo-name">«МЕБЕЛЬ-2024»</span>
+          </div>
+          <div class="expo-details">
+            <p><strong>ВЕЛЕС, ФК, OOO</strong></p>
+            <p>Стенд: 81A60</p>
+            <p>📍 Подольск, Московская обл.</p>
+            <p>📞 +7 (499) 290-5200</p>
+            <p>🌐 <a href="https://veles-legs.ru" target="_blank">veles-legs.ru</a></p>
+            <p class="expo-desc">Производитель опор для корпусной и мягкой мебели из дерева и металла. Изготовление по индивидуальным чертежам.</p>
+          </div>
+        </div>
+        <!-- КОНЕЦ БЛОКА -->
+
+        <!-- ССЫЛКИ ДЛЯ AI-РОБОТОВ (ЯНДЕКС, ГУГЛ, CHATGPT) -->
+        <div class="footer__ai-links">
+          <a href="/page/llmstxt">LLMS</a>
+          <span class="footer__ai-divider">|</span>
+          <a href="/page/yandex-aitxt">AI Info</a>
+        </div>
+        <!-- КОНЕЦ ССЫЛОК ДЛЯ AI -->
+
+      </footer>
+    </div>
+    
+    <div data-fixed-panels="bottom">
+      {% for widgetDrop in widget_lists.bottom-panel-list.widgets %}
+        {% widget widgetDrop %}
+      {% endfor %}
+    </div>
+
+    <div class="outside-widgets">
+      {% for widgetDrop in widget_lists.outside-list.widgets %}
+        {% widget widgetDrop %}
+      {% endfor %}
+    </div>
+
+
+	{%- capture css_js_lists -%}header-list, footer-list, sidebar-list, outside-list, {{ template }}-list, {{ template }}-section_top-list, {{ template }}-section_bottom-list, bottom-panel-list, top-panel-list{%- endcapture -%}
+
+  {% if sidebar_show or editor_mode? %}
+    {% if template contains 'blog' %}
+    {% assign css_js_lists = css_js_lists | append: ', sidebar_blog-list' %}
+    {% elsif template contains 'article' %}
+      {% assign css_js_lists = css_js_lists | append: ', sidebar_article-list' %}
+    {% elsif template contains 'index' %}
+      {% assign css_js_lists = css_js_lists | append: ', sidebar_index-list' %}
+    {% elsif template contains 'collection' %}
+      {% assign css_js_lists = css_js_lists | append: ', sidebar_collection-list' %}
+    {% elsif template contains 'product' %}
+      {% assign css_js_lists = css_js_lists | append: ', sidebar_product-list' %}
+    {% elsif template contains 'compare' %}
+      {% assign css_js_lists = css_js_lists | append: ', sidebar_compare-list' %}
+    {% elsif template contains 'favorite' %}
+      {% assign css_js_lists = css_js_lists | append: ', sidebar_favorite-list' %}
+    {% elsif template contains 'search' %}
+      {% assign css_js_lists = css_js_lists | append: ', sidebar_search-list' %}
+    {% elsif template contains 'page' %}
+      {% assign css_js_lists = css_js_lists | append: ', sidebar_page-list' %}
+    {% elsif template contains 'cart' %}
+      {% assign css_js_lists = css_js_lists | append: ', sidebar_cart-list' %}
+    {% endif %}
+  {% endif %}
+
+  {% widgets_assets css_js_lists %}
+
+  {% include "styles" %}
+
+  <!-- добавлен defer для ускорения загрузки -->
+  <script src="{{ 'theme.js' | asset_url }}" charset="utf-8" defer></script>
+  <!-- ===== КОНЕЦ ===== -->
+
+  <!-- УЛУЧШЕНИЕ ДОСТУПНОСТИ (A11Y) + атрибуты для логотипа -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var searchBtn = document.querySelector('.header__search-btn');
+      if (searchBtn && !searchBtn.hasAttribute('aria-label')) {
+        searchBtn.setAttribute('aria-label', 'Открыть поиск');
+      }
+
+      var compareLink = document.querySelector('.header__control-btn.header__compare');
+      if (compareLink && !compareLink.hasAttribute('aria-label')) {
+        compareLink.setAttribute('aria-label', 'Перейти к сравнению');
+      }
+
+      var cartLink = document.querySelector('.header__control-btn.header__cart');
+      if (cartLink && !cartLink.hasAttribute('aria-label')) {
+        cartLink.setAttribute('aria-label', 'Перейти в корзину');
+      }
+
+      var favoriteLink = document.querySelector('.header__control-btn.header__favorite');
+      if (favoriteLink && !favoriteLink.hasAttribute('aria-label')) {
+        favoriteLink.setAttribute('aria-label', 'Перейти в избранное');
+      }
+
+      var selectMetal = document.querySelector('.metal-height');
+      if (selectMetal && !selectMetal.hasAttribute('aria-label') && !selectMetal.id) {
+        selectMetal.setAttribute('aria-label', 'Высота металлической опоры');
+      }
+
+      var allSelects = document.querySelectorAll('select:not([aria-label]):not([id])');
+      allSelects.forEach(function(sel) {
+        var labelFor = sel.id ? document.querySelector('label[for="' + sel.id + '"]') : null;
+        if (!labelFor) {
+          var placeholder = sel.getAttribute('placeholder') || sel.querySelector('option:first-child')?.textContent || 'Выберите';
+          sel.setAttribute('aria-label', placeholder);
+        }
+      });
+
+      var logoImg = document.querySelector('img[alt*="veles-legs.ru"]');
+      if (logoImg && !logoImg.hasAttribute('width')) {
+        logoImg.setAttribute('width', '200');
+        logoImg.setAttribute('height', '60');
+        logoImg.setAttribute('loading', 'lazy');
+      }
+    });
+  </script>
+
+  <!-- ИСПРАВЛЕНИЕ SEO: УБИРАЕМ ДУБЛИРОВАНИЕ H1 -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var allH1 = document.querySelectorAll('h1');
+    if (allH1.length > 1) {
+      for (var i = 1; i < allH1.length; i++) {
+        var h1 = allH1[i];
+        var h2 = document.createElement('h2');
+        for (var j = 0; j < h1.attributes.length; j++) {
+          var attr = h1.attributes[j];
+          h2.setAttribute(attr.name, attr.value);
+        }
+        h2.innerHTML = h1.innerHTML;
+        h1.parentNode.replaceChild(h2, h1);
+      }
+    }
+  });
+  </script>
+  <!-- ===== КОНЕЦ ИСПРАВЛЕНИЯ SEO ===== -->
+
+  <!-- СТИЛИ ДЛЯ ПОДВАЛА -->
+  <style>
+    .footer__area-copyright {
+      display: none !important;
+    }
+
+    .footer__blog-link {
+      text-align: center;
+      margin: 20px 0 15px;
+    }
+    .footer__blog-link a {
+      display: inline-block;
+      background: #000;
+      color: #fff !important;
+      padding: 12px 28px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-decoration: none;
+      border-radius: 30px;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .footer__blog-link a:hover {
+      background: #333;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+    .footer__blog-icon {
+      margin-right: 10px;
+      font-size: 18px;
+    }
+
+    .expo-participant-card {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: center;
+      gap: 20px 40px;
+      background: #f8f8f8;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 20px 30px;
+      margin: 20px auto;
+      max-width: 1000px;
+      font-family: 'Montserrat', sans-serif;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .expo-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .expo-icon {
+      font-size: 28px;
+    }
+    .expo-title {
+      font-size: 14px;
+      font-weight: 400;
+      color: #555;
+    }
+    .expo-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #000;
+    }
+    .expo-details {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 20px;
+      font-size: 14px;
+      color: #222;
+    }
+    .expo-details p {
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .expo-details a {
+      color: #000;
+      text-decoration: underline;
+    }
+    .expo-details a:hover {
+      opacity: 0.7;
+    }
+    .expo-desc {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .expo-participant-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 15px;
+        padding: 20px 15px;
+      }
+      .expo-details {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+      .footer__blog-link a {
+        font-size: 14px;
+        padding: 10px 20px;
+      }
+    }
+
+    /* ===== ССЫЛКИ ДЛЯ AI-РОБОТОВ (НЕЗАМЕТНЫЕ, В САМОМ НИЗУ) ===== */
+    .footer__ai-links {
+      text-align: center;
+      margin-top: 15px;
+      padding-top: 15px;
+      font-size: 11px;
+      color: #999;
+      opacity: 0.7;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .footer__ai-links a {
+      color: #999;
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+    .footer__ai-links a:hover {
+      opacity: 1;
+      text-decoration: underline;
+      color: #666;
+    }
+    .footer__ai-divider {
+      margin: 0 8px;
+      color: #ccc;
+    }
+    /* ===== КОНЕЦ ССЫЛОК ДЛЯ AI ===== */
+  </style>
+  <!-- КОНЕЦ СТИЛЕЙ -->
+
+  </body>
+</html>

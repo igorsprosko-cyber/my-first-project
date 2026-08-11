@@ -1,0 +1,174 @@
+{% assign blog_size = settings.blog_size | default: "6" %}
+{% paginate articles by blog_size %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;500&display=swap');
+
+  /* ----- ОБЩИЙ КОНТЕЙНЕР СТРАНИЦЫ БЛОГА ----- */
+  .vl-blog-page {
+    background: #fff;
+    padding: 60px 20px;
+    font-family: 'Montserrat', sans-serif;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ----- ЗАГОЛОВОК БЛОГА ----- */
+  .vl-blog-page h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #000;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0 0 15px;
+    position: relative;
+  }
+  .vl-blog-page h1::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 2px;
+    background: #000;
+    margin: 15px auto 0;
+  }
+
+  /* ----- СЕТКА СТАТЕЙ ----- */
+  .vl-blog-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 40px;
+  }
+
+  /* ----- КАРТОЧКА СТАТЬИ ----- */
+  .vl-blog-article {
+    background: #fff;
+    border: 1px solid #000;
+    border-radius: 12px;
+    padding: 25px 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .vl-blog-article:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+  }
+
+  .vl-blog-article__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #000;
+    margin: 0 0 8px;
+    line-height: 1.2;
+  }
+  .vl-blog-article__excerpt {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.6;
+    margin: 0 0 12px;
+    font-weight: 300;
+  }
+  .vl-blog-article__meta {
+    font-size: 13px;
+    color: #888;
+    letter-spacing: 0.5px;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+    margin-top: 4px;
+  }
+  .vl-blog-article__meta a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .vl-blog-article__meta a:hover {
+    text-decoration: underline;
+  }
+
+  /* ----- ПАГИНАЦИЯ (если есть) ----- */
+  .vl-blog-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 40px;
+    list-style: none;
+    padding: 0;
+  }
+  .vl-blog-pagination a,
+  .vl-blog-pagination span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    padding: 0 4px;
+    transition: opacity 0.3s;
+  }
+  .vl-blog-pagination a:hover {
+    opacity: 0.6;
+  }
+  .vl-blog-pagination .active {
+    font-weight: 700;
+    border-bottom: 2px solid #000;
+    padding-bottom: 2px;
+  }
+
+  /* ----- АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ ----- */
+  @media (max-width: 768px) {
+    .vl-blog-page {
+      padding: 40px 15px;
+    }
+    .vl-blog-page h1 {
+      font-size: 28px;
+    }
+    .vl-blog-article {
+      padding: 20px;
+    }
+    .vl-blog-article__title {
+      font-size: 18px;
+    }
+    .vl-blog-article__excerpt {
+      font-size: 14px;
+    }
+  }
+</style>
+
+<section class="vl-blog-page">
+  <!-- ===== ИЗМЕНЕНО: статический "Блог" заменён на динамический {{ blog.title }} ===== -->
+  <h1>{{ blog.title }}</h1>
+  <!-- ===== КОНЕЦ ИЗМЕНЕНИЯ ===== -->
+
+  <div class="vl-blog-grid">
+    {% for article in articles %}
+      <a href="{{ article.url }}" class="vl-blog-article">
+        <div class="vl-blog-article__title">{{ article.title }}</div>
+        <div class="vl-blog-article__excerpt">
+          {{ article.excerpt_or_content | strip_html | truncate: 160 }}
+        </div>
+        <div class="vl-blog-article__meta">
+          {{ article.published_at | date: "%d.%m.%Y" }}
+        </div>
+      </a>
+    {% else %}
+      <p style="text-align:center; color:#555; padding:40px 0;">В блоге пока нет статей.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Пагинация -->
+  {% if paginate.pages > 1 %}
+    <div class="vl-blog-pagination">
+      {{ paginate | default_pagination }}
+    </div>
+  {% endif %}
+</section>
+
+{% endpaginate %}

@@ -1,0 +1,976 @@
+<!-- БЛОК 1: ПЕРВЫЙ ЭКРАН (HERO) -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;500;700&display=swap');
+
+  .vl-hero {
+    background: #fff;
+    padding: 80px 20px 60px;
+    text-align: center;
+    position: relative;
+    border-bottom: 2px solid #000;
+  }
+  .vl-hero::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: #000;
+  }
+  .vl-hero-content { max-width: 800px; margin: 0 auto; }
+  .vl-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 8vw, 72px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.5px;
+    color: #000;
+    margin: 0 0 20px;
+    text-transform: uppercase;
+  }
+  .vl-hero h1 span {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(14px, 2vw, 18px);
+    font-weight: 300;
+    letter-spacing: 4px;
+    color: #555;
+    margin-top: 15px;
+    text-transform: uppercase;
+  }
+  .vl-hero p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(15px, 2.5vw, 18px);
+    font-weight: 300;
+    line-height: 1.7;
+    color: #333;
+    margin: 0 auto 40px;
+    max-width: 500px;
+    letter-spacing: 1px;
+  }
+  .vl-hero .btn {
+    font-family: 'Montserrat', sans-serif;
+    background: transparent;
+    color: #000;
+    padding: 16px 40px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: 2px solid #000;
+    border-radius: 0;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+  }
+  .vl-hero .btn:hover { background: #000; color: #fff; }
+  .hero-phone-block { margin-top: 30px; }
+  .hero-phone-block .hero-notice {
+    font-size: 13px; letter-spacing: 1px; color: #555; margin-bottom: 20px; line-height: 1.5; max-width: 520px; margin-left: auto; margin-right: auto;
+  }
+  .hero-phone-block input {
+    font-family: 'Montserrat', sans-serif; padding: 14px 20px; border: 1px solid #000; font-size: 14px; width: 260px; text-align: center; letter-spacing: 1px; background: transparent; outline: none; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;
+  }
+  .hero-phone-block .btn { margin-top: 15px; padding: 12px 30px; font-size: 13px; letter-spacing: 1px; border-width: 1px; }
+</style>
+
+<section class="vl-hero">
+  <div class="vl-hero-content">
+    <h1>Veles Legs<span>мебельные опоры</span></h1>
+    <p>Поставляем комплектующие для фабрик России.<br>Поможем подобрать или изготовим по вашему чертежу.</p>
+    <a href="#" class="btn" id="hero-request-btn">Запросить прайс</a>
+    <div class="hero-phone-block" id="hero-phone-block" style="display:none;">
+      <p class="hero-notice">В прайсе указаны стандартные цены с НДС. Итоговая стоимость может измениться на день заказа. Менеджер обсудит все нюансы и предложит оптовую скидку за объём. Оставьте свои контактные данные.</p>
+      <input type="text" id="hero-org" placeholder="Название организации">
+      <input type="text" id="hero-name" placeholder="Ваше имя">
+      <input type="tel" id="hero-phone" placeholder="+7 (___) ___-__-__">
+      <button class="btn" id="hero-send-btn">Отправить</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+    var heroRequestBtn = document.getElementById('hero-request-btn');
+    var heroPhoneBlock = document.getElementById('hero-phone-block');
+    var heroSendBtn = document.getElementById('hero-send-btn');
+    if (heroRequestBtn) {
+      heroRequestBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        heroRequestBtn.style.display = 'none';
+        heroPhoneBlock.style.display = 'block';
+      });
+    }
+    if (heroSendBtn) {
+      heroSendBtn.addEventListener('click', function() {
+        var org = document.getElementById('hero-org').value.trim();
+        var name = document.getElementById('hero-name').value.trim();
+        var phone = document.getElementById('hero-phone').value.trim();
+        if (!phone) { alert('Введите телефон'); return; }
+        var body = 'Здравствуйте!\n\nПрошу отправить прайс-лист на опоры.\n';
+        if (org) body += 'Организация: ' + org + '\n';
+        if (name) body += 'Имя: ' + name + '\n';
+        body += 'Контактный телефон: ' + phone + '\n\nСпасибо!';
+        window.location.href = 'mailto:veles.mf@yandex.ru?subject=' + encodeURIComponent('Запрос прайс-листа') + '&body=' + encodeURIComponent(body);
+      });
+    }
+  })();
+</script>
+
+<!-- БЛОК 2: О НАШИХ ОПОРАХ -->
+<style>
+  .vl-about-ops { padding: 30px 20px 20px; text-align: center; background: #ffffff; font-family: 'Roboto', 'Arial', sans-serif; }
+  .vl-about-ops h2 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: #000000; margin: 0 0 15px; }
+  .vl-about-ops p { font-size: 15px; color: #000000; max-width: 800px; margin: 0 auto; line-height: 1.6; }
+</style>
+<section class="vl-about-ops">
+  <h2>Надёжные опоры для вашего производства</h2>
+  <p>Veles Legs — российский производитель мебельных опор из дерева и металла. Мы работаем с крупными фабриками и торговыми компаниями: поставляем опоры для кроватей, диванов, столов, стульев и корпусной мебели. В нашем ассортименте — резьбовые, фланцевые и сквозные крепления, регулируемые заглушки, колёсики и индивидуальные решения по чертежам. Каждая партия проходит контроль качества, а собственное конструкторское бюро помогает заказчикам подобрать оптимальную конфигурацию под любые нагрузки.</p>
+</section>
+
+<!-- БЛОК 3: КАТАЛОГ -->
+<style>
+  .vl-categories { padding: 50px 20px 70px; text-align: center; background: #ffffff; font-family: 'Roboto', 'Arial', sans-serif; }
+  .vl-categories h2 { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; color: #000000; margin: 0 0 30px; position: relative; }
+  .vl-categories h2::after { content: ''; display: block; width: 80px; height: 2px; background: #000; margin: 15px auto 0; }
+  .vl-categories-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; max-width: 1200px; margin: 0 auto; }
+  .vl-category-card {
+    display: block !important; background: #ffffff !important; border: 2px solid #000000 !important; border-radius: 12px !important;
+    width: 230px !important; padding: 30px 15px 20px !important; text-align: center !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.3s ease !important; text-decoration: none !important; color: #000000 !important; cursor: pointer !important;
+  }
+  .vl-category-card:hover { background: #000000 !important; border-color: #000000 !important; transform: translateY(-5px) !important; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important; }
+  .vl-category-card:hover .vl-category-icon { background: #333333 !important; }
+  .vl-category-card:hover h3, .vl-category-card:hover p { color: #ffffff !important; }
+  .vl-category-icon { display: flex; align-items: center; justify-content: center; width: 100%; height: 100px; background: #f9f9f9; border-radius: 8px; margin-bottom: 15px; font-size: 52px; transition: background 0.3s ease; }
+  .vl-category-card h3 { font-size: 17px; font-weight: 600; color: #000000; margin: 0 0 5px; transition: color 0.3s ease; }
+  .vl-category-card p { font-size: 13px; color: #000000; margin: 0; line-height: 1.4; transition: color 0.3s ease; }
+  @media (max-width: 768px) {
+    .vl-categories-grid { gap: 15px; }
+    .vl-category-card { width: 160px !important; padding: 20px 10px !important; }
+    .vl-category-icon { height: 80px; font-size: 40px; }
+  }
+</style>
+<section class="vl-categories">
+  <h2>Наша продукция</h2>
+  <div class="vl-categories-grid">
+    <a href="/collection/derevyannye-nozhki-dlya-mebeli" class="vl-category-card"><div class="vl-category-icon">🪵</div><h3>Деревянные ножки</h3><p>Массив дуба, бука, ясеня. Резьба, фланец, сквозное крепление.</p></a>
+    <a href="/collection/metallicheskie-nozhki-dlya-mebeli" class="vl-category-card"><div class="vl-category-icon">⚙️</div><h3>Металлические ножки</h3><p>Хром, чёрный, белый. Регулируемые, с колёсиком, с фланцем.</p></a>
+    <a href="/collection/new" class="vl-category-card"><div class="vl-category-icon">🔩</div><h3>Фурнитура</h3><p>Крепёж, заглушки, подпятники. Всё для сборки мебели.</p></a>
+    <a href="/collection/raboty-na-zakaz" class="vl-category-card"><div class="vl-category-icon">🛠️</div><h3>Изделия под заказ</h3><p>Нестандартные размеры, материалы, чертежи. Индивидуальные проекты.</p></a>
+    <a href="/collection/hits" class="vl-category-card"><div class="vl-category-icon">🔥</div><h3>Хиты продаж</h3><p>Самые востребованные опоры у производителей мебели.</p></a>
+    <a href="/collection/aktsii" class="vl-category-card"><div class="vl-category-icon">💰</div><h3>Акции</h3><p>Специальные предложения и скидки на опоры.</p></a>
+  </div>
+</section>
+
+<!-- БЛОК 4: ПОДБОРЩИК ОПОР (УМНЫЙ КАЛЬКУЛЯТОР B2B v8.6 - С НДС 22%) -->
+<style>
+  .vl-selector { padding: 50px 20px; background: #ffffff; font-family: 'Roboto', 'Arial', sans-serif; text-align: center; }
+  .vl-selector h2 { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: #000000; margin: 0 0 10px; }
+  .vl-selector .subtitle { font-size: 16px; color: #000000; margin-bottom: 25px; }
+  .vl-selector-tabs { display: flex; justify-content: center; gap: 20px; margin-bottom: 25px; }
+  .vl-tab { background: transparent; border: 1px solid #000000; color: #000000; padding: 10px 24px; border-radius: 30px; font-size: 16px; cursor: pointer; transition: 0.2s; font-family: 'Montserrat', sans-serif; font-weight: 500; }
+  .vl-tab.active { background: #000000; color: #ffffff; }
+  .vl-tab:not(.active):hover { background: #f0f0f0; }
+  .vl-selector-panel { display: none; max-width: 1000px; margin: 0 auto; }
+  .vl-selector-panel.active { display: block; }
+  .vl-columns { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
+  .vl-column { flex: 1 1 350px; min-width: 300px; background: #fff; padding: 20px; border: 1px solid #000; border-radius: 12px; text-align: left; }
+  .vl-column h3 { font-family: 'Playfair Display', serif; font-size: 20px; margin: 0 0 12px; text-align: center; color: #000; }
+  .vl-select-group { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 8px; }
+  .vl-select-group label { font-weight: 500; font-size: 14px; margin-bottom: 4px; color: #000000; }
+  .vl-select-group select, .vl-select-group input, .vl-select-group textarea {
+    width: 100%; padding: 8px 12px; border: 1px solid #000000; border-radius: 20px; font-size: 14px; background: #ffffff; outline: none; color: #000000; box-sizing: border-box; font-family: 'Roboto', sans-serif;
+  }
+  .vl-select-group textarea { border-radius: 12px; resize: vertical; min-height: 60px; }
+  .vl-select-group .hint-text { font-size: 12px; color: #666; margin-top: 3px; font-style: italic; }
+  
+  .vl-calc-result { background: #f9f9f9; border: 1px solid #000; border-radius: 12px; padding: 12px; margin-top: 15px; display: none; }
+  .vl-calc-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; color: #333; }
+  .vl-calc-row.total { border-top: 1px solid #000; padding-top: 6px; margin-top: 6px; font-weight: 700; font-size: 16px; color: #000; }
+  .vl-calc-row.vat-row { font-size: 13px; color: #555; margin-bottom: 4px; }
+  .vl-calc-row.total-vat { 
+    border-top: 2px solid #000; 
+    padding-top: 10px; 
+    margin-top: 10px; 
+    font-weight: 900; 
+    font-size: 20px; 
+    color: #000; 
+    letter-spacing: 0.5px;
+  }
+  .vl-calc-discount { color: #d32f2f; font-weight: 600; }
+
+  .vl-action { margin-top: 25px; text-align: center; display: flex; justify-content: center; flex-wrap: wrap; }
+  
+  .vl-action .btn-final {
+    display: inline-block;
+    padding: 18px 40px;
+    background: #000000;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 2px solid #000000;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  .vl-action .btn-final:hover {
+    background: #ffffff;
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  }
+
+  .vl-form-block {
+    display: none; margin-top: 25px; background: #f9f9f9; padding: 25px; border-radius: 12px; border: 1px solid #000; text-align: left; max-width: 700px; margin-left: auto; margin-right: auto;
+  }
+  .vl-form-block h4 { font-family: 'Playfair Display', serif; margin: 0 0 15px; text-align: center; font-size: 22px; }
+  .vl-form-block input {
+    width: 100%; padding: 12px 14px; border: 1px solid #000; border-radius: 20px; font-size: 14px; margin-bottom: 12px; box-sizing: border-box; background: #fff;
+  }
+  .vl-form-block textarea {
+    width: 100%;
+    padding: 16px 18px;
+    border: 1px solid #000;
+    border-radius: 12px;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    background: #fff;
+    min-height: 280px;
+    max-height: 600px;
+    resize: vertical;
+    font-family: 'Roboto', 'Arial', sans-serif;
+    color: #000;
+  }
+  .vl-form-block .send-btn {
+    display: block; width: 100%; padding: 14px; background: #000; color: #fff; border: none; border-radius: 30px; font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.3s; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .vl-form-block .send-btn:hover { background: #333; }
+</style>
+
+<section class="vl-selector">
+  <h2>Рассчитайте стоимость партии</h2>
+  <p class="subtitle">Выберите параметры. Система автоматически применит оптовые скидки. Все цены указаны с НДС 22%.</p>
+
+  <div class="vl-selector-tabs">
+    <button class="vl-tab active" data-tab="wood">Деревянные опоры</button>
+    <button class="vl-tab" data-tab="metal">Металлические опоры</button>
+  </div>
+
+  <div class="vl-selector-panel active" id="panel-wood">
+    <div class="vl-columns">
+      <div class="vl-column" id="wood-col1">
+        <h3>Параметры деревянных опор</h3>
+        
+        <div class="vl-select-group">
+          <label for="wood-h-1">Высота, мм</label>
+          <select class="wood-height" id="wood-h-1" onchange="handleWoodHeight(this); calcWood(1)">
+            <option value="">— Выберите —</option>
+            <option value="40">40 мм</option><option value="50">50 мм</option><option value="60">60 мм</option>
+            <option value="70">70 мм</option><option value="80">80 мм</option><option value="90">90 мм</option>
+            <option value="100">100 мм</option><option value="110">110 мм</option><option value="120">120 мм</option>
+            <option value="130">130 мм</option><option value="140">140 мм</option><option value="150">150 мм</option>
+            <option value="160">160 мм</option><option value="170">170 мм</option><option value="180">180 мм</option>
+            <option value="190">190 мм</option><option value="200">200 мм</option><option value="220">220 мм</option>
+            <option value="250">250 мм</option><option value="280">280 мм</option><option value="300">300 мм</option>
+            <option value="320">320 мм</option><option value="350">350 мм</option>
+            <option value="other">Иное (под заказ)</option>
+          </select>
+          <input type="text" class="wood-height-other" id="wood-h-other-1" placeholder="Введите высоту в мм (например, 750)" style="display:none; margin-top:5px;" oninput="calcWood(1)">
+        </div>
+
+        <div class="vl-select-group">
+          <label for="wood-shape-1">Тип сечения</label>
+          <select class="wood-shape" id="wood-shape-1" onchange="handleWoodShape(this); calcWood(1)">
+            <option value="">— Выберите —</option>
+            <option value="round">Круглые</option>
+            <option value="square">Квадратные</option>
+            <option value="carved">Резные (фигурные)</option>
+          </select>
+        </div>
+
+        <div class="vl-select-group wood-form-group" style="display:none;">
+          <label for="wood-form-1">Форма опоры</label>
+          <select class="wood-form" id="wood-form-1" onchange="handleWoodForm(this); calcWood(1)">
+            <option value="straight">Прямые</option>
+            <option value="cone">Конусные</option>
+          </select>
+        </div>
+
+        <div class="vl-select-group wood-dim-group" style="display:none;">
+          <label for="wood-top-d-1" class="dim-label-round">Верхний диаметр, мм</label>
+          <label for="wood-top-s-1" class="dim-label-square" style="display:none;">Верхний размер, мм</label>
+          <select class="wood-top-diameter" id="wood-top-d-1" onchange="handleWoodDim(this); calcWood(1)">
+            <option value="40">40 мм</option><option value="50">50 мм</option><option value="60">60 мм</option>
+            <option value="other">Иное (под заказ)</option>
+          </select>
+          <select class="wood-top-size" id="wood-top-s-1" onchange="handleWoodDim(this); calcWood(1)" style="display:none;">
+            <option value="40">40×40 мм</option><option value="50">50×50 мм</option><option value="60">60×60 мм</option>
+            <option value="other">Иное (под заказ)</option>
+          </select>
+          <input type="text" class="wood-dim-other" id="wood-dim-other-1" placeholder="Введите размер в мм (например, 85)" style="display:none; margin-top:5px;" oninput="calcWood(1)">
+        </div>
+
+        <div class="vl-select-group wood-bottom-dim-group" style="display:none;">
+          <label for="wood-bottom-d-1" class="dim-label-round-bottom">Нижний диаметр, мм</label>
+          <label for="wood-bottom-s-1" class="dim-label-square-bottom" style="display:none;">Нижний размер, мм</label>
+          <select class="wood-bottom-diameter" id="wood-bottom-d-1" onchange="handleWoodDim(this); calcWood(1)">
+            <option value="20">20 мм</option><option value="25">25 мм</option><option value="30">30 мм</option>
+            <option value="35">35 мм</option><option value="40">40 мм</option><option value="45">45 мм</option>
+            <option value="50">50 мм</option><option value="55">55 мм</option>
+            <option value="other">Иное (под заказ)</option>
+          </select>
+          <select class="wood-bottom-size" id="wood-bottom-s-1" onchange="handleWoodDim(this); calcWood(1)" style="display:none;">
+            <option value="20">20×20 мм</option><option value="25">25×25 мм</option><option value="30">30×30 мм</option>
+            <option value="35">35×35 мм</option><option value="40">40×40 мм</option><option value="45">45×45 мм</option>
+            <option value="50">50×50 мм</option><option value="55">55×55 мм</option>
+            <option value="other">Иное (под заказ)</option>
+          </select>
+          <input type="text" class="wood-bottom-dim-other" id="wood-bottom-dim-other-1" placeholder="Введите размер в мм" style="display:none; margin-top:5px;" oninput="calcWood(1)">
+        </div>
+
+        <div class="vl-select-group wood-carved-desc" style="display:none;">
+          <label for="wood-carved-text-1">Опишите желаемую модель резной опоры</label>
+          <textarea class="wood-carved-text" id="wood-carved-text-1" placeholder="Опишите форму или вставьте ссылку на фото/сайт-пример (например, https://...)" oninput="calcWood(1)"></textarea>
+          <span class="hint-text">💡 Совет: опишите модель словами или вставьте ссылку на фото/сайт-пример — это ускорит понимание вашей задачи.</span>
+        </div>
+
+        <div class="vl-select-group">
+          <label for="wood-tilt-1">Наличие наклона</label>
+          <select class="wood-tilt" id="wood-tilt-1" onchange="handleWoodTilt(this); calcWood(1)">
+            <option value="no">Нет (прямая)</option>
+            <option value="15">15°</option>
+            <option value="30">30°</option>
+            <option value="45">45°</option>
+            <option value="other">Другой угол (под заказ)</option>
+          </select>
+          <input type="text" class="wood-tilt-other" id="wood-tilt-other-1" placeholder="Введите угол в градусах (например, 25)" style="display:none; margin-top:5px;" oninput="calcWood(1)">
+        </div>
+
+        <div class="vl-select-group">
+          <label for="wood-color-1">Цвет / Отделка</label>
+          <select class="wood-color" id="wood-color-1" onchange="handleWoodColor(this); calcWood(1)">
+            <option value="unpainted">Без покраски</option>
+            <option value="lacquer">Лак</option>
+            <option value="black">Черные</option>
+            <option value="wenge">Венге</option>
+            <option value="ral">Иное / RAL (под заказ)</option>
+          </select>
+          <input type="text" class="wood-color-other" id="wood-color-other-1" placeholder="Укажите код RAL (например, RAL 9005) или вставьте ссылку на образец" style="display:none; margin-top:5px;" oninput="calcWood(1)">
+          <span class="hint-text wood-color-hint" id="wood-color-hint-1" style="display:none;">💡 Можно указать код RAL или ссылку на фото-образец цвета.</span>
+        </div>
+
+        <div class="vl-select-group">
+          <label for="wood-mount-1">Крепление</label>
+          <select class="wood-mount" id="wood-mount-1" onchange="calcWood(1)">
+            <option value="none">Без крепления</option>
+            <option value="stud_m8">Шпилька резьба М8</option>
+            <option value="screw_m6">Винт М6</option>
+            <option value="screw_m10">Винт М10</option>
+            <option value="plate">Площадка</option>
+            <option value="plate_screw_m8">Площадка с винтом М8</option>
+          </select>
+        </div>
+
+        <div class="vl-select-group">
+          <label for="wood-base-1">Основание</label>
+          <select class="wood-base" id="wood-base-1" onchange="handleWoodBase(this); calcWood(1)">
+            <option value="without_wheel">Без колеса (войлок/торец)</option>
+            <option value="with_wheel">С колесом</option>
+            <option value="other">Иное (под заказ)</option>
+          </select>
+          <input type="text" class="wood-base-other" id="wood-base-other-1" placeholder="Опишите основание (например, регулируемый подпятник М10)" style="display:none; margin-top:5px;" oninput="calcWood(1)">
+        </div>
+
+        <div class="vl-select-group">
+          <label for="wood-qty-1">Количество, шт.</label>
+          <input type="number" class="wood-quantity" id="wood-qty-1" placeholder="Минимум 1" min="1" value="1" oninput="calcWood(1)">
+        </div>
+
+        <div class="vl-calc-result" id="wood-calc-1">
+          <div class="vl-calc-row"><span>Цена за 1 шт (базовая):</span> <span id="wood-base-price-1">0 ₽</span></div>
+          <div class="vl-calc-row" id="wood-disc-row-1" style="display:none;"><span>Цена за 1 шт (со скидкой):</span> <span id="wood-disc-price-1">0 ₽</span></div>
+          <div class="vl-calc-row"><span>Количество:</span> <span id="wood-qty-display-1">0 шт</span></div>
+          <div class="vl-calc-row" id="wood-sum-disc-row-1" style="display:none;"><span>Сумма скидки:</span> <span id="wood-sum-disc-1" class="vl-calc-discount">0 ₽</span></div>
+          <div class="vl-calc-row vat-row"><span>Цена без НДС:</span> <span id="wood-price-no-vat-1">0 ₽</span></div>
+          <div class="vl-calc-row vat-row"><span>НДС (22%):</span> <span id="wood-vat-amount-1">0 ₽</span></div>
+          <div class="vl-calc-row total-vat"><span>Итого с НДС:</span> <span id="wood-total-1">0 ₽</span></div>
+          <div class="vl-calc-row"><span>Вес партии:</span> <span id="wood-weight-1">0 кг</span></div>
+          <div class="vl-calc-row"><span>Количество мест:</span> <span id="wood-places-1">0 мест</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vl-action" id="wood-action">
+      <button class="btn-final" id="wood-submit-final-btn" style="display:none;">ОТПРАВИТЬ РАСЧЕТ МЕНЕДЖЕРУ</button>
+    </div>
+
+    <div class="vl-form-block" id="wood-form-block">
+      <h4>ОТПРАВИТЬ РАСЧЕТ МЕНЕДЖЕРУ</h4>
+      <p style="font-size:13px; color:#555; text-align:center; margin-bottom:15px;">Менеджер проверит расчет, подтвердит наличие и свяжется с вами для уточнения деталей заказа.</p>
+      <input type="text" id="wood-name" placeholder="Ваше имя *">
+      <input type="tel" id="wood-phone" placeholder="Телефон *">
+      <input type="email" id="wood-email" placeholder="Email *">
+      <input type="text" id="wood-org" placeholder="Название компании">
+      <textarea id="wood-comment" placeholder="Комментарий к заказу"></textarea>
+      <button class="send-btn" id="wood-send-btn">Отправить заявку</button>
+    </div>
+  </div>
+
+  <div class="vl-selector-panel" id="panel-metal">
+    <div class="vl-columns">
+      <div class="vl-column">
+        <h3>Металлические опоры</h3>
+        <p style="text-align:center; color:#666;">Калькулятор для металлических опор находится в разработке. Пожалуйста, оставьте заявку менеджеру.</p>
+      </div>
+    </div>
+    <div class="vl-action">
+      <button class="btn-final" onclick="openManagerForm('metal')">ОТПРАВИТЬ ЗАПРОС МЕНЕДЖЕРУ</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  var translations = {
+    shape: { round: 'Круглые', square: 'Квадратные', carved: 'Резные (фигурные)' },
+    form: { straight: 'Прямые', cone: 'Конусные' },
+    color: { unpainted: 'Без покраски', lacquer: 'Лак', black: 'Черные', wenge: 'Венге', ral: 'RAL (под заказ)' },
+    mount: { 
+      none: 'Без крепления',
+      stud_m8: 'Шпилька М8', 
+      screw_m6: 'Винт М6',
+      screw_m10: 'Винт М10',
+      plate: 'Площадка', 
+      plate_screw_m8: 'Площадка с винтом М8' 
+    },
+    base: { without_wheel: 'Без колеса (войлок/торец)', with_wheel: 'С колесом' },
+    tilt: { no: 'Нет (прямая)', '15': '15°', '30': '30°', '45': '45°' }
+  };
+
+  window.handleWoodHeight = function(sel) {
+    var otherInput = sel.closest('.vl-select-group').querySelector('.wood-height-other');
+    otherInput.style.display = (sel.value === 'other') ? 'block' : 'none';
+    if(sel.value !== 'other') otherInput.value = '';
+  };
+
+  window.handleWoodShape = function(sel) {
+    var col = sel.closest('.vl-column');
+    var formGroup = col.querySelector('.wood-form-group');
+    var dimGroup = col.querySelector('.wood-dim-group');
+    var bottomDimGroup = col.querySelector('.wood-bottom-dim-group');
+    var carvedDesc = col.querySelector('.wood-carved-desc');
+    var roundLabel = col.querySelector('.dim-label-round');
+    var squareLabel = col.querySelector('.dim-label-square');
+    var roundLabelBottom = col.querySelector('.dim-label-round-bottom');
+    var squareLabelBottom = col.querySelector('.dim-label-square-bottom');
+    var roundSelect = col.querySelector('.wood-top-diameter');
+    var squareSelect = col.querySelector('.wood-top-size');
+    var roundSelectBottom = col.querySelector('.wood-bottom-diameter');
+    var squareSelectBottom = col.querySelector('.wood-bottom-size');
+    var formVal = col.querySelector('.wood-form').value;
+
+    if (sel.value === 'round') {
+      formGroup.style.display = 'flex'; dimGroup.style.display = 'flex'; carvedDesc.style.display = 'none';
+      roundLabel.style.display = 'block'; squareLabel.style.display = 'none';
+      roundLabelBottom.style.display = 'block'; squareLabelBottom.style.display = 'none';
+      roundSelect.style.display = 'block'; squareSelect.style.display = 'none';
+      roundSelectBottom.style.display = 'block'; squareSelectBottom.style.display = 'none';
+      bottomDimGroup.style.display = (formVal === 'cone') ? 'flex' : 'none';
+    } else if (sel.value === 'square') {
+      formGroup.style.display = 'flex'; dimGroup.style.display = 'flex'; carvedDesc.style.display = 'none';
+      roundLabel.style.display = 'none'; squareLabel.style.display = 'block';
+      roundLabelBottom.style.display = 'none'; squareLabelBottom.style.display = 'block';
+      roundSelect.style.display = 'none'; squareSelect.style.display = 'block';
+      roundSelectBottom.style.display = 'none'; squareSelectBottom.style.display = 'block';
+      bottomDimGroup.style.display = (formVal === 'cone') ? 'flex' : 'none';
+    } else if (sel.value === 'carved') {
+      formGroup.style.display = 'flex'; 
+      dimGroup.style.display = 'flex'; 
+      bottomDimGroup.style.display = 'flex';
+      carvedDesc.style.display = 'flex';
+      roundLabel.style.display = 'block'; squareLabel.style.display = 'none';
+      roundLabelBottom.style.display = 'block'; squareLabelBottom.style.display = 'none';
+      roundSelect.style.display = 'block'; squareSelect.style.display = 'none';
+      roundSelectBottom.style.display = 'block'; squareSelectBottom.style.display = 'none';
+    } else {
+      formGroup.style.display = 'none'; dimGroup.style.display = 'none'; bottomDimGroup.style.display = 'none'; carvedDesc.style.display = 'none';
+    }
+  };
+
+  window.handleWoodForm = function(sel) {
+    var col = sel.closest('.vl-column');
+    var bottomDimGroup = col.querySelector('.wood-bottom-dim-group');
+    var shape = col.querySelector('.wood-shape').value;
+    
+    if (shape === 'carved') {
+      bottomDimGroup.style.display = 'flex';
+    } else if (sel.value === 'cone' && (shape === 'round' || shape === 'square')) {
+      bottomDimGroup.style.display = 'flex';
+    } else {
+      bottomDimGroup.style.display = 'none';
+    }
+  };
+
+  window.handleWoodDim = function(sel) {
+    var otherInput = sel.closest('.vl-select-group').querySelector('.wood-dim-other, .wood-bottom-dim-other');
+    if (otherInput) {
+      otherInput.style.display = (sel.value === 'other') ? 'block' : 'none';
+      if(sel.value !== 'other') otherInput.value = '';
+    }
+  };
+
+  window.handleWoodTilt = function(sel) {
+    var otherInput = sel.closest('.vl-select-group').querySelector('.wood-tilt-other');
+    otherInput.style.display = (sel.value === 'other') ? 'block' : 'none';
+    if(sel.value !== 'other') otherInput.value = '';
+  };
+
+  window.handleWoodBase = function(sel) {
+    var otherInput = sel.closest('.vl-select-group').querySelector('.wood-base-other');
+    otherInput.style.display = (sel.value === 'other') ? 'block' : 'none';
+    if(sel.value !== 'other') otherInput.value = '';
+  };
+
+  window.handleWoodColor = function(sel) {
+    var col = sel.closest('.vl-select-group');
+    var otherInput = col.querySelector('.wood-color-other');
+    var hint = col.querySelector('.wood-color-hint');
+    if (sel.value === 'ral') {
+      otherInput.style.display = 'block';
+      hint.style.display = 'block';
+    } else {
+      otherInput.style.display = 'none';
+      hint.style.display = 'none';
+      otherInput.value = '';
+    }
+  };
+
+  document.querySelectorAll('.vl-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.vl-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.vl-selector-panel').forEach(p => p.classList.remove('active'));
+      this.classList.add('active');
+      document.getElementById('panel-' + this.getAttribute('data-tab')).classList.add('active');
+    });
+  });
+
+  window.calcWood = function(colIdx) {
+    var hVal = document.getElementById('wood-h-' + colIdx).value;
+    var shape = document.getElementById('wood-shape-' + colIdx).value;
+    var form = document.getElementById('wood-form-' + colIdx).value;
+    var dimSelect = shape === 'round' || shape === 'carved' ? document.getElementById('wood-top-d-' + colIdx) : document.getElementById('wood-top-s-' + colIdx);
+    var dimVal = dimSelect ? dimSelect.value : '';
+    var bottomDimSelect = shape === 'round' || shape === 'carved' ? document.getElementById('wood-bottom-d-' + colIdx) : document.getElementById('wood-bottom-s-' + colIdx);
+    var bottomDimVal = bottomDimSelect ? bottomDimSelect.value : '';
+    var color = document.getElementById('wood-color-' + colIdx).value;
+    var base = document.getElementById('wood-base-' + colIdx).value;
+    var tilt = document.getElementById('wood-tilt-' + colIdx).value;
+    var qty = parseInt(document.getElementById('wood-qty-' + colIdx).value) || 0;
+
+    var resultBox = document.getElementById('wood-calc-' + colIdx);
+    var submitBtn = document.getElementById('wood-submit-final-btn');
+
+    if (!hVal || !shape || qty < 1) {
+      resultBox.style.display = 'none';
+      submitBtn.style.display = 'none';
+      return;
+    }
+
+    var needsManager = false;
+
+    if (hVal === 'other') needsManager = true;
+    if (shape === 'carved') needsManager = true;
+    if (dimVal === 'other') needsManager = true;
+    if (bottomDimVal === 'other') needsManager = true;
+    if (color === 'ral') needsManager = true;
+    if (base === 'other') needsManager = true;
+    if (tilt === 'other') needsManager = true;
+    if (qty >= 2000) needsManager = true;
+
+    if (needsManager) {
+      resultBox.style.display = 'none';
+      submitBtn.style.display = 'inline-block';
+      submitBtn.innerText = 'ОТПРАВИТЬ ЗАПРОС МЕНЕДЖЕРУ (НЕСТАНДАРТ)';
+      return;
+    }
+
+    var basePricePerCm = 0;
+    var dNum = parseInt(dimVal);
+    var bottomDNum = parseInt(bottomDimVal);
+    
+    var effectiveD = dNum;
+    if (form === 'cone' && !isNaN(bottomDNum) && bottomDNum > 0) {
+      effectiveD = Math.max(dNum, bottomDNum);
+    }
+
+    if (shape === 'round') {
+      if (effectiveD === 40) basePricePerCm = 24;
+      else if (effectiveD === 50) basePricePerCm = 32;
+      else if (effectiveD === 60) basePricePerCm = 44;
+    } else if (shape === 'square') {
+      if (effectiveD === 40) basePricePerCm = 32;
+      else if (effectiveD === 50) basePricePerCm = 40;
+      else if (effectiveD === 60) basePricePerCm = 52;
+    }
+
+    var heightCm = parseInt(hVal) / 10;
+    var basePrice = basePricePerCm * heightCm;
+
+    var componentPrice = 0;
+    var mount = document.getElementById('wood-mount-' + colIdx).value;
+    if (mount === 'plate') componentPrice = 32.5;
+    else if (mount === 'plate_screw_m8') componentPrice = 40;
+    
+    if (base === 'with_wheel') componentPrice += 65;
+
+    var colorPrice = 0;
+    if (color === 'lacquer') colorPrice = 50;
+    else if (color === 'black') colorPrice = 100;
+    else if (color === 'wenge') colorPrice = 150;
+
+    var finalUnitPriceExact = basePrice + componentPrice + colorPrice;
+
+    var discount = 0;
+    if (qty >= 1000) discount = 0.10;
+    else if (qty >= 400) discount = 0.05;
+    else if (qty >= 40) discount = 0.03;
+
+    var discountedUnitPrice = finalUnitPriceExact * (1 - discount);
+    var totalPrice = discountedUnitPrice * qty; // Это цена С НДС 22%
+    var totalDiscountSum = (finalUnitPriceExact - discountedUnitPrice) * qty;
+
+    // РАСЧЁТ НДС (все цены уже с НДС 22%)
+    var priceWithoutVat = totalPrice / 1.22;
+    var vatAmount = totalPrice - priceWithoutVat;
+
+    var weightPerUnit = 0;
+    var placesCount = 0;
+    
+    if (shape === 'round') {
+      var radius = dNum / 2000;
+      var heightM = parseInt(hVal) / 1000;
+      var volume = Math.PI * radius * radius * heightM;
+      weightPerUnit = volume * 720;
+    } else if (shape === 'square') {
+      var sideM = dNum / 1000;
+      var heightM = parseInt(hVal) / 1000;
+      var volume = sideM * sideM * heightM;
+      weightPerUnit = volume * 720;
+    }
+
+    var heightNum = parseInt(hVal);
+    var capacityPerBox = 0;
+    if (heightNum === 100) capacityPerBox = 100;
+    else if (heightNum >= 110 && heightNum <= 150) capacityPerBox = 70;
+    else if (heightNum === 160) capacityPerBox = 60;
+    else if (heightNum === 170) capacityPerBox = 50;
+    else if (heightNum === 180) capacityPerBox = 45;
+    else if (heightNum === 190) capacityPerBox = 40;
+    else if (heightNum === 200) capacityPerBox = 35;
+    else if (heightNum === 220) capacityPerBox = 30;
+    else if (heightNum === 250) capacityPerBox = 25;
+    else if (heightNum === 280) capacityPerBox = 20;
+    else if (heightNum === 300) capacityPerBox = 18;
+    else if (heightNum === 320) capacityPerBox = 15;
+    else if (heightNum === 350) capacityPerBox = 12;
+    else capacityPerBox = 10;
+
+    placesCount = Math.ceil(qty / capacityPerBox);
+    var totalWeight = (weightPerUnit * qty) + (0.2 * placesCount) + (0.35 * placesCount);
+
+    document.getElementById('wood-base-price-1').innerText = finalUnitPriceExact.toLocaleString('ru-RU') + ' ₽';
+    document.getElementById('wood-qty-display-1').innerText = qty + ' шт';
+    document.getElementById('wood-price-no-vat-1').innerText = Math.round(priceWithoutVat).toLocaleString('ru-RU') + ' ₽';
+    document.getElementById('wood-vat-amount-1').innerText = Math.round(vatAmount).toLocaleString('ru-RU') + ' ₽';
+    document.getElementById('wood-total-1').innerText = Math.round(totalPrice).toLocaleString('ru-RU') + ' ₽';
+    document.getElementById('wood-weight-1').innerText = totalWeight.toFixed(2) + ' кг';
+    document.getElementById('wood-places-1').innerText = placesCount + ' мест';
+
+    var discRow = document.getElementById('wood-disc-row-1');
+    var sumDiscRow = document.getElementById('wood-sum-disc-row-1');
+    
+    if (discount > 0) {
+      document.getElementById('wood-disc-price-1').innerText = discountedUnitPrice.toLocaleString('ru-RU', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' ₽ (' + (discount*100) + '%)';
+      document.getElementById('wood-sum-disc-1').innerText = '-' + Math.round(totalDiscountSum).toLocaleString('ru-RU') + ' ₽';
+      discRow.style.display = 'flex';
+      sumDiscRow.style.display = 'flex';
+    } else {
+      discRow.style.display = 'none';
+      sumDiscRow.style.display = 'none';
+    }
+
+    resultBox.style.display = 'block';
+    submitBtn.style.display = 'inline-block';
+    submitBtn.innerText = 'ОТПРАВИТЬ РАСЧЕТ МЕНЕДЖЕРУ';
+  };
+
+  window.openManagerForm = function(type) {
+    fillComment();
+    document.getElementById('wood-form-block').style.display = 'block';
+    document.getElementById('wood-form-block').scrollIntoView({behavior: 'smooth'});
+  };
+
+  function fillComment() {
+    var h = document.getElementById('wood-h-1').value;
+    var hOther = document.getElementById('wood-h-other-1').value;
+    var shape = document.getElementById('wood-shape-1').value;
+    var form = document.getElementById('wood-form-1').value;
+    var dim = document.getElementById('wood-top-d-1').value;
+    var dimOther = document.getElementById('wood-dim-other-1').value;
+    var bottomDim = document.getElementById('wood-bottom-d-1').value;
+    var bottomDimOther = document.getElementById('wood-bottom-dim-other-1').value;
+    var tilt = document.getElementById('wood-tilt-1').value;
+    var tiltOther = document.getElementById('wood-tilt-other-1').value;
+    var color = document.getElementById('wood-color-1').value;
+    var colorOther = document.getElementById('wood-color-other-1').value;
+    var mount = document.getElementById('wood-mount-1').value;
+    var base = document.getElementById('wood-base-1').value;
+    var baseOther = document.getElementById('wood-base-other-1').value;
+    var carved = document.getElementById('wood-carved-text-1').value;
+    var qty = document.getElementById('wood-qty-1').value;
+
+    var comment = 'Параметры из калькулятора:\n';
+    comment += '- Высота: ' + (h === 'other' ? hOther + ' мм (под заказ)' : h + ' мм') + '\n';
+    comment += '- Сечение: ' + (translations.shape[shape] || shape) + '\n';
+    
+    if (shape !== 'carved') {
+      comment += '- Форма: ' + (translations.form[form] || form) + '\n';
+      var dimText = (dim === 'other' ? dimOther + ' мм (под заказ)' : dim + ' мм');
+      comment += '- Верхний размер: ' + dimText + '\n';
+      if (form === 'cone') {
+        var bottomDimText = (bottomDim === 'other' ? bottomDimOther + ' мм (под заказ)' : bottomDim + ' мм');
+        comment += '- Нижний размер: ' + bottomDimText + '\n';
+      }
+    } else {
+      comment += '- Базовый диаметр: ' + (dim === 'other' ? dimOther + ' мм (под заказ)' : dim + ' мм') + '\n';
+      var bottomDimText = (bottomDim === 'other' ? bottomDimOther + ' мм (под заказ)' : bottomDim + ' мм');
+      comment += '- Нижний диаметр: ' + bottomDimText + '\n';
+      if (carved) comment += '- Описание/ссылка на модель: ' + carved + '\n';
+    }
+    
+    var tiltText = (tilt === 'other' ? tiltOther + '° (под заказ)' : (translations.tilt[tilt] || tilt));
+    comment += '- Наклон: ' + tiltText + '\n';
+    
+    if (color === 'ral') {
+      comment += '- Цвет: Иное / RAL — ' + (colorOther || 'не указан') + '\n';
+    } else {
+      comment += '- Цвет: ' + (translations.color[color] || color) + '\n';
+    }
+    
+    comment += '- Крепление: ' + (translations.mount[mount] || mount) + '\n';
+    var baseText = (base === 'other' ? baseOther + ' (под заказ)' : (translations.base[base] || base));
+    comment += '- Основание: ' + baseText + '\n';
+    comment += '- Количество: ' + qty + ' шт.\n';
+    
+    var resultBox = document.getElementById('wood-calc-1');
+    if (resultBox && resultBox.style.display === 'block') {
+      var total = document.getElementById('wood-total-1').innerText;
+      var priceNoVat = document.getElementById('wood-price-no-vat-1').innerText;
+      var vatAmount = document.getElementById('wood-vat-amount-1').innerText;
+      var weight = document.getElementById('wood-weight-1').innerText;
+      var places = document.getElementById('wood-places-1').innerText;
+      
+      if (priceNoVat && priceNoVat !== '0 ₽' && !isNaN(parseFloat(priceNoVat.replace(/\s/g, '')))) {
+        comment += '- Цена без НДС: ' + priceNoVat + '\n';
+      }
+      if (vatAmount && vatAmount !== '0 ₽' && !isNaN(parseFloat(vatAmount.replace(/\s/g, '')))) {
+        comment += '- НДС (22%): ' + vatAmount + '\n';
+      }
+      if (total && total !== '0 ₽' && !isNaN(parseFloat(total.replace(/\s/g, '')))) {
+        comment += '- Итого с НДС: ' + total + '\n';
+      }
+      if (weight && weight !== '0 кг' && !isNaN(parseFloat(weight))) {
+        comment += '- Вес партии: ' + weight + '\n';
+      }
+      if (places && places !== '0 мест' && !isNaN(parseInt(places))) {
+        comment += '- Количество мест: ' + places + '\n';
+      }
+    }
+    
+    comment += '\n[Требуется подтверждение расчета менеджером]';
+
+    document.getElementById('wood-comment').value = comment;
+  }
+
+  document.getElementById('wood-submit-final-btn').addEventListener('click', function() { openManagerForm('wood'); });
+
+  document.getElementById('wood-send-btn').addEventListener('click', function() {
+    var name = document.getElementById('wood-name').value.trim();
+    var phone = document.getElementById('wood-phone').value.trim();
+    var email = document.getElementById('wood-email').value.trim();
+    var org = document.getElementById('wood-org').value.trim();
+    var comment = document.getElementById('wood-comment').value.trim();
+
+    if (!name || !phone || !email) { 
+      alert('Пожалуйста, заполните обязательные поля: Имя, Телефон и Email'); 
+      return; 
+    }
+
+    var body = 'Здравствуйте!\n\n';
+    body += 'Имя: ' + name + '\n';
+    body += 'Телефон: ' + phone + '\n';
+    body += 'Email: ' + email + '\n';
+    if (org) body += 'Компания: ' + org + '\n';
+    body += '\n' + comment + '\n\nПрошу связаться для подтверждения.';
+
+    window.location.href = 'mailto:veles.mf@yandex.ru?subject=' + encodeURIComponent('Запрос расчета деревянных опор с сайта') + '&body=' + encodeURIComponent(body);
+  });
+</script>
+
+<!-- БЛОК 5: ПРОИЗВОДСТВО НА ЗАКАЗ -->
+<style>
+  .vl-custom { padding: 70px 20px; text-align: center; background: #ffffff; font-family: 'Roboto', 'Arial', sans-serif; }
+  .vl-custom h2 { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: #000000; margin: 0 0 15px; }
+  .vl-custom .vl-custom-desc { font-size: 16px; color: #000000; max-width: 700px; margin: 0 auto 35px; line-height: 1.6; font-weight: 400; }
+  .vl-custom-features { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; max-width: 900px; margin: 0 auto 35px; }
+  .vl-custom-feature { background: #ffffff; border: 1px solid #000000; border-radius: 12px; padding: 25px 20px; width: 200px; text-align: center; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); }
+  .vl-custom-feature .icon { font-size: 34px; margin-bottom: 12px; opacity: 0.9; }
+  .vl-custom-feature h3 { font-size: 15px; font-weight: 500; color: #000000; margin: 0 0 8px; }
+  .vl-custom-feature p { font-size: 13px; color: #000000; margin: 0; }
+  .vl-custom .btn { display: inline-block; padding: 14px 34px; background: #000000; color: #ffffff; font-weight: 500; text-decoration: none; border-radius: 30px; font-size: 16px; letter-spacing: 0.5px; transition: background 0.3s, transform 0.2s; border: none; cursor: pointer; }
+  .vl-custom .btn:hover { background: #333333; transform: translateY(-2px); }
+  .vl-custom-contacts { margin-top: 25px; font-size: 15px; color: #000000; }
+  .vl-custom-contacts a { color: #000000; font-weight: 500; text-decoration: underline; }
+</style>
+<section class="vl-custom">
+  <h2>Не нашли то, что искали?<br>Изготовим опоры по вашему проекту</h2>
+  <p class="vl-custom-desc">У вас нестандартный дизайн или особые требования к нагрузке? Наше конструкторское бюро разработает решение под вашу задачу. Работаем с деревом и металлом. Минимальный тираж обсуждается индивидуально.</p>
+  <div class="vl-custom-features">
+    <div class="vl-custom-feature"><div class="icon">📐</div><h3>По вашему чертежу</h3><p>Изготовим по готовой документации или эскизу</p></div>
+    <div class="vl-custom-feature"><div class="icon">🛠️</div><h3>Любые материалы</h3><p>Дерево ценных пород, металл, комбинированные решения</p></div>
+    <div class="vl-custom-feature"><div class="icon">⚖️</div><h3>Высокие нагрузки</h3><p>Рассчитаем и протестируем опоры под ваши задачи</p></div>
+    <div class="vl-custom-feature"><div class="icon">🚛</div><h3>Доставка по РФ</h3><p>Отгружаем партии любого объёма в срок</p></div>
+  </div>
+  <div class="vl-custom-contacts">
+    Или свяжитесь с нами напрямую:<br>
+    📞 <a href="tel:+74992905200">8-499-290-52-00</a>  ✉️ <a href="mailto:veles.mf@yandex.ru">veles.mf@yandex.ru</a>
+  </div>
+</section>
+
+<!-- БЛОК 6: С КЕМ МЫ РАБОТАЕМ -->
+<style>
+  .vl-clients { padding: 70px 20px; text-align: center; background: #ffffff; font-family: 'Roboto', 'Arial', sans-serif; }
+  .vl-clients h2 { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: #000000; margin: 0 0 15px; }
+  .vl-clients p { font-size: 16px; color: #000000; max-width: 700px; margin: 0 auto 45px; line-height: 1.6; font-weight: 400; }
+  .vl-clients-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; max-width: 1000px; margin: 0 auto; }
+  .vl-client-card { background: #ffffff; border: 1px solid #000000; border-radius: 12px; padding: 30px 20px; width: 200px; text-align: center; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); }
+  .vl-client-card .icon { font-size: 38px; margin-bottom: 15px; opacity: 0.9; }
+  .vl-client-card h3 { font-size: 15px; font-weight: 500; color: #000000; margin: 0; letter-spacing: 0.3px; }
+  @media (max-width: 768px) { .vl-clients-grid { gap: 15px; } .vl-client-card { width: 150px; padding: 20px 10px; } }
+</style>
+<section class="vl-clients">
+  <h2>С кем мы работаем</h2>
+  <p>Мы понимаем специфику каждого производства — от нагрузок до эстетики. Поставляем опоры для всех типов мебельных фабрик.</p>
+  <div class="vl-clients-grid">
+    <div class="vl-client-card"><div class="icon">🛏️</div><h3>Производители кроватей и матрасов</h3></div>
+    <div class="vl-client-card"><div class="icon">🛋️</div><h3>Производители мягкой мебели</h3></div>
+    <div class="vl-client-card"><div class="icon">🪑</div><h3>Производители корпусной мебели</h3></div>
+    <div class="vl-client-card"><div class="icon">🏭</div><h3>Крупные оптовые компании</h3></div>
+  </div>
+</section>
+
+<!-- ===== НАЧАЛО БЛОКА: РЕКЛАМА VELES LIGHT (СВЕТ) ===== -->
+<style>
+  .veles-light-promo {
+    padding: 60px 20px;
+    background: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+  }
+  .veles-light-promo__container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    text-align: left;
+  }
+  .veles-light-promo__content { flex: 1; }
+  .veles-light-promo__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #000;
+    margin: 0 0 15px;
+    line-height: 1.2;
+  }
+  .veles-light-promo__text { font-size: 16px; line-height: 1.6; color: #333; margin: 0 0 25px; }
+  .veles-light-promo__btn {
+    display: inline-block;
+    background: #000;
+    color: #fff;
+    padding: 14px 35px;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border-radius: 30px;
+    border: 2px solid #000;
+    transition: all 0.3s ease;
+  }
+  .veles-light-promo__btn:hover { background: #fff; color: #000; }
+  .veles-light-promo__image {
+    flex: 1;
+    max-width: 400px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #000;
+  }
+  .veles-light-promo__image img { width: 100%; height: auto; display: block; object-fit: cover; }
+  @media (max-width: 768px) {
+    .veles-light-promo__container { flex-direction: column-reverse; text-align: center; gap: 25px; }
+    .veles-light-promo__image { max-width: 100%; }
+    .veles-light-promo__title { font-size: 26px; }
+  }
+</style>
+
+<section class="veles-light-promo">
+  <div class="veles-light-promo__container">
+    <div class="veles-light-promo__content">
+      <h2 class="veles-light-promo__title">Новое направление: Дизайнерские светильники из дерева</h2>
+      <p class="veles-light-promo__text">
+        Мы расширяем границы работы с массивом. Тот же строгий контроль качества, те же технологии обработки дерева и любовь к деталям теперь воплощены в уникальных настольных лампах <strong>Veles Light</strong>.
+      </p>
+      <a href="https://veleslight.ru/collection/lampy" target="_blank" class="veles-light-promo__btn">
+        Смотреть каталог светильников →
+      </a>
+    </div>
+    <div class="veles-light-promo__image">
+      <img src="https://static.insales-cdn.com/files/1/5193/111866953/original/лого26.jpg" alt="veleslight.ru" title="veleslight.ru">
+    </div>
+  </div>
+</section>
+<!-- ===== КОНЕЦ БЛОКА: РЕКЛАМА VELES LIGHT ===== -->
+
+<!-- БЛОК 7: О ПРОИЗВОДСТВЕ -->
+<style>
+  .vl-about { padding: 70px 20px; text-align: center; background: #ffffff; font-family: 'Roboto', 'Arial', sans-serif; }
+  .vl-about h2 { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; color: #000000; margin: 0 0 35px; }
+  .vl-about-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; max-width: 900px; margin: 0 auto; }
+  .vl-about-item { width: 250px; text-align: center; }
+  .vl-about-item .icon { font-size: 44px; margin-bottom: 15px; opacity: 0.9; }
+  .vl-about-item h3 { font-size: 17px; font-weight: 500; color: #000000; margin: 0 0 10px; }
+  .vl-about-item p { font-size: 14px; color: #000000; line-height: 1.5; }
+  @media (max-width: 768px) { .vl-about-item { width: 100%; max-width: 300px; } }
+</style>
+<section class="vl-about">
+  <h2>Почему выбирают нас</h2>
+  <div class="vl-about-grid">
+    <div class="vl-about-item"><div class="icon">🏭</div><h3>Современное оборудование</h3><p>Собственный парк станков с ЧПУ и автоматические линии покраски</p></div>
+    <div class="vl-about-item"><div class="icon">✅</div><h3>Контроль качества</h3><p>Многоступенчатая проверка каждой партии: от сырья до упаковки</p></div>
+    <div class="vl-about-item"><div class="icon">📐</div><h3>Собственное КБ</h3><p>Инженеры-конструкторы разработают опоры под любые задачи и нагрузки</p></div>
+  </div>
+</section>
