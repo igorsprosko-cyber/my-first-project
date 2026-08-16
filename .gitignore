@@ -45,6 +45,7 @@ htmlcov/
 .coverage
 
 # Generic compressed archives
+*.zip
 *.gz
 *.tar
 *.tgz

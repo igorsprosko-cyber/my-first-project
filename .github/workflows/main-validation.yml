@@ -53,6 +53,12 @@ jobs:
           done < <(git ls-files '*.zip')
           test "$bad" -eq 0
 
+      - name: Run static Liquid and widget audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/static_audit.py
+
       - name: Validate repository has no unresolved merge markers
         shell: bash
         run: |
