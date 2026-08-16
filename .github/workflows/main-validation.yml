@@ -1,0 +1,64 @@
+name: Main validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate JSON configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          files = sorted(Path('.').rglob('*.json'))
+          if not files:
+              raise SystemExit('No JSON files found')
+          for path in files:
+              with path.open(encoding='utf-8') as fh:
+                  json.load(fh)
+              print(f'OK JSON: {path}')
+          PY
+
+      - name: Validate required project files
+        shell: bash
+        run: |
+          set -euo pipefail
+          required=(AGENTS.md PROJECT.md ARCHITECTURE.md STYLE_GUIDE.md TASKS.md SITE_MAP.md STABILITY_AUDIT.md config/setup.json config/settings.json config/settings_data.json config/messages.json media/theme.scss)
+          for file in "${required[@]}"; do
+            test -f "$file" || { echo "Missing required file: $file"; exit 1; }
+          done
+          echo "Required project files present"
+
+      - name: Validate tracked archive policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          bad=0
+          while IFS= read -r file; do
+            case "$file" in
+              myshop-*_theme_*.zip) ;;
+              *.zip) echo "Unexpected tracked ZIP: $file"; bad=1 ;;
+            esac
+          done < <(git ls-files '*.zip')
+          test "$bad" -eq 0
+
+      - name: Validate repository has no unresolved merge markers
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git grep -n -E '^(<<<<<<< |=======|>>>>>>> )' -- . ':!*.md'; then
+            echo 'Unresolved merge conflict markers found in source files'
+            exit 1
+          fi
+          echo 'No unresolved merge markers in source files'
